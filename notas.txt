@@ -1,0 +1,25 @@
+Iván Gómez Navarro, amante del arte y los videojuegos.
+Practico pádel y natación, he ido de viaje a Roma y Londres.
+Me gusta dibujar, cocinar, y jugar videojuegos.
+Quiero ser un desarrollador de videojuegos, es lo que más me interesa de la programación.
+Me va el estilo gamer pero minimalista, mis colores favoritos son el morado, rosa y zaul.
+
+Quiero crear mi web personal de marca con HTML, CSS y JS puros. Voy a gestionar yo los ficheros,
+así que dame el código completo de cada fichero en un bloque, sin explicaciones largas.
+
+Ficha: soy Iván Gómez Navarro, amante del arte y los videojuegos, del ciclo de 1º DAM del IES Simarro.
+Cosas que he hecho: Practico pádel y natación, he ido de viaje a Roma y Londres.
+Me gusta: Me gusta dibujar, cocinar, y jugar videojuegos.
+Quiero ser / me interesa: Quiero ser un desarrollador de videojuegos, es lo que más me interesa de la programación.
+Colores/estilo: Me va el estilo gamer pero minimalista, mis colores favoritos son el morado, rosa y zaul.
+
+Haz el index.html con: cabecera (nombre + frase), "Sobre mí", "Lo que he hecho",
+"Me gusta", un pie de página con contacto. HTML semántico, etiquetas comentadas.
+
+Genera el style.css para mi web personal.
+- Paleta basada en los colores que te dije: Morado, rosa y azul
+- Cabecera con fondo de color, texto legible, tipografía limpia
+- Contenido centrado, ancho máx 900px, espaciado generoso
+- Cuadrícula de 2 columnas para "Me gusta", adaptada a móvil (1 columna)
+- Estilo de enlaces y botones coherente con la marca
+Sin frameworks. Solo CSS puro, comentado.

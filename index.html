@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Metadatos básicos de la página -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iván Gómez Navarro — Arte, videojuegos y código</title>
+  <meta name="description" content="Marca personal de Iván Gómez Navarro: estudiante de 1º DAM en el IES Simarro, amante del arte, los videojuegos y el deporte, con la meta de ser desarrollador de videojuegos.">
+  <meta name="theme-color" content="#08060f">
+
+  <!-- Tipografías: display (Chakra Petch), texto (Manrope) y monoespaciada (JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Capa de grano + foco de luz que sigue al cursor -->
+  <div class="grain" aria-hidden="true"></div>
+  <div class="spot" aria-hidden="true"></div>
+
+  <!-- ============ CABECERA FIJA: nombre + frase ============ -->
+  <header class="site-header">
+    <div class="wrap header-in">
+      <a class="brand" href="#inicio">
+        <span class="brand-mark">IG</span>
+        <span class="brand-txt">
+          <strong>Iván Gómez Navarro</strong>
+          <em>Arte, videojuegos y líneas de código.</em>
+        </span>
+      </a>
+
+      <!-- Navegación principal -->
+      <nav class="nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="#sobre-mi">Sobre mí</a></li>
+          <li><a href="#hecho">Lo que he hecho</a></li>
+          <li><a href="#gusta">Me gusta</a></li>
+          <li><a href="#meta">Mi meta</a></li>
+          <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ HERO: pantalla de perfil de jugador ============ -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+
+        <!-- Columna izquierda: nombre, frase y acciones -->
+        <div class="hero-main">
+          <p class="kicker" data-scramble>player_profile — v1.0</p>
+          <h1 class="hero-name" id="hero-title">
+            <span class="scr" data-scramble>Iván Gómez</span>
+            <span class="outline">Navarro</span>
+          </h1>
+          <p class="hero-phrase reveal" style="--d:.15s">
+            Dibujo mundos, los cocino a fuego lento y los programo.
+            <b>Estudiante de 1º DAM</b> en el IES Simarro con una única misión:
+            convertirme en <b>desarrollador de videojuegos</b>.
+          </p>
+
+          <!-- Etiquetas rápidas -->
+          <ul class="chips reveal" style="--d:.25s">
+            <li>1º DAM</li><li>IES Simarro</li><li>Arte</li><li>Videojuegos</li><li>Pádel</li><li>Natación</li>
+          </ul>
+
+          <div class="hero-actions reveal" style="--d:.35s">
+            <a class="btn btn-primary" href="#hecho">Ver logros desbloqueados</a>
+            <a class="btn btn-ghost" href="#contacto">Escríbeme</a>
+          </div>
+
+          <!-- Contadores tipo HUD -->
+          <dl class="hero-stats reveal" style="--d:.45s">
+            <div><dt>Ciudad</dt><dd>Villarreal, Castelló</dd></div>
+            <div><dt>Curso</dt><dd>1º DAM</dd></div>
+            <div><dt>Rol soñado</dt><dd>Game Developer</dd></div>
+          </dl>
+        </div>
+
+        <!-- Columna derecha: tarjeta de jugador -->
+        <aside class="player-card reveal" style="--d:.2s" aria-label="Tarjeta de jugador">
+          <div class="pc-top">
+            <span class="pc-dot"></span>
+            <span class="pc-file">ivan_gomez.dat</span>
+            <span class="pc-lvl">LVL 19</span>
+          </div>
+
+          <figure class="pc-media">
+            <img src="https://picsum.photos/seed/ivan-gamer-portrait/640/720" alt="Retrato de Iván Gómez Navarro" width="640" height="720">
+            <span class="pc-badge">ONLINE</span>
+          </figure>
+
+          <div class="pc-body">
+            <p class="pc-class"><b>Clase:</b> Estudiante de DAM · <b>Subclase:</b> artista de teclado</p>
+
+            <!-- Barras de habilidad -->
+            <ul class="stats">
+              <li class="stat" style="--w:95%;--d:.1s"><span class="stat-name">Videojuegos</span><span class="stat-bar"><i></i></span><span class="stat-num" data-count="95">0</span></li>
+              <li class="stat" style="--w:82%;--d:.2s"><span class="stat-name">Dibujo</span><span class="stat-bar"><i></i></span><span class="stat-num" data-count="82">0</span></li>
+              <li class="stat" style="--w:74%;--d:.3s"><span class="stat-name">Programación</span><span class="stat-bar"><i></i></span><span class="stat-num" data-count="74">0</span></li>
+              <li class="stat" style="--w:70%;--d:.4s"><span class="stat-name">Pádel</span><span class="stat-bar"><i></i></span><span class="stat-num" data-count="70">0</span></li>
+              <li class="stat" style="--w:68%;--d:.5s"><span class="stat-name">Natación</span><span class="stat-bar"><i></i></span><span class="stat-num" data-count="68">0</span></li>
+              <li class="stat" style="--w:64%;--d:.6s"><span class="stat-name">Cocina</span><span class="stat-bar"><i></i></span><span class="stat-num" data-count="64">0</span></li>
+            </ul>
+
+            <!-- Barra de carga animada -->
+            <div class="pc-load">
+              <span class="pc-load-label" data-skill>Renderizando</span>
+              <div class="load-track"><i></i></div>
+              <span class="pc-load-pct">0%</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Cinta de texto en movimiento -->
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          <span>1º DAM</span><span>·</span><span>GAME DEV</span><span>·</span><span>DIBUJO</span><span>·</span><span>PÁDEL</span><span>·</span><span>NATACIÓN</span><span>·</span><span>ROMA</span><span>·</span><span>LONDRES</span><span>·</span><span>COCINA</span><span>·</span><span>PIXEL ART</span><span>·</span>
+          <span>1º DAM</span><span>·</span><span>GAME DEV</span><span>·</span><span>DIBUJO</span><span>·</span><span>PÁDEL</span><span>·</span><span>NATACIÓN</span><span>·</span><span>ROMA</span><span>·</span><span>LONDRES</span><span>·</span><span>COCINA</span><span>·</span><span>PIXEL ART</span><span>·</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SOBRE MÍ ============ -->
+    <section class="sec" id="sobre-mi" aria-labelledby="sobre-title">
+      <div class="wrap two-col">
+
+        <!-- Columna pegajosa (sticky) -->
+        <div class="sticky-col">
+          <p class="sec-num">01 / 04</p>
+          <h2 class="sec-title mask" id="sobre-title"><span>Sobre mí</span></h2>
+          <p class="sec-kicker">Perfil</p>
+          <img class="sticky-photo" src="https://picsum.photos/seed/sketchbook-pencil-drawing/720/520" alt="Cuaderno de bocetos y lápices" loading="lazy" width="720" height="520">
+        </div>
+
+        <!-- Columna que hace scroll -->
+        <div class="flow-col">
+          <p class="lead reveal">
+            Soy <b>Iván Gómez Navarro</b> y vivo a caballo entre dos pantallas: la del cuaderno de
+            dibujo y la del editor de código. Empecé dibujando personajes que no existían y ahora
+            quiero programar los mundos donde se muevan.
+          </p>
+          <p class="reveal" style="--d:.1s">
+            Estudio <b>1º de DAM en el IES Simarro</b>, y de todo lo que toca programar hay una
+            rama que me puede: el <b>desarrollo de videojuegos</b>. Es el punto exacto donde
+            el arte, las matemáticas, la música y las ganas de contar historias se encuentran.
+          </p>
+          <blockquote class="reveal" style="--d:.15s">
+            «Un buen juego te hace sentir algo en diez minutos. Un buen plato, en dos horas.
+            Un buen dibujo, para siempre. Yo quiero hacer las tres cosas.»
+          </blockquote>
+
+          <!-- Datos rápidos -->
+          <dl class="facts">
+            <div class="reveal"><dt>Formación</dt><dd>1º DAM · IES Simarro</dd></div>
+            <div class="reveal" style="--d:.08s"><dt>Aficiones</dt><dd>Dibujar, cocinar, jugar</dd></div>
+            <div class="reveal" style="--d:.16s"><dt>Deporte</dt><dd>Pádel y natación</dd></div>
+            <div class="reveal" style="--d:.24s"><dt>Idiomas</dt><dd>Español · Inglés</dd></div>
+            <div class="reveal" style="--d:.32s"><dt>Estudio favorito</dt><dd>Noche, auriculares y café</dd></div>
+            <div class="reveal" style="--d:.4s"><dt>Siguiente reto</dt><dd>Terminar mi primer juego jugable</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LO QUE HE HECHO ============ -->
+    <section class="sec" id="hecho" aria-labelledby="hecho-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <p class="sec-num">02 / 04</p>
+            <h2 class="sec-title mask" id="hecho-title"><span>Lo que he hecho</span></h2>
+          </div>
+          <p class="sec-note">Logros desbloqueados — pasa la página para abrir la pila</p>
+        </div>
+
+        <!-- Tarjetas apiladas (stacked cards) -->
+        <div class="stack">
+          <article class="stack-card" style="--i:0">
+            <div class="sc-media"><img src="https://picsum.photos/seed/unity-game-studio-code/900/700" alt="Pantalla de código de un motor de videojuegos" loading="lazy" width="900" height="700"></div>
+            <div class="sc-body">
+              <p class="sc-tag">Logro 01 · RAREZA ÉPICA</p>
+              <h3>Dentro de 1º DAM</h3>
+              <p>He elegido el ciclo de <b>Desarrollo de Aplicaciones Multiplataforma</b> en el IES Simarro
+                 para aprender a programar de verdad: programación, bases de datos, marcas y entornos de
+                 desarrollo. Cada tema nuevo es un nivel más cerca de mi objetivo.</p>
+              <ul class="sc-meta"><li>IES Simarro</li><li>Curso en curso</li></ul>
+            </div>
+          </article>
+
+          <article class="stack-card" style="--i:1">
+            <div class="sc-media"><img src="https://picsum.photos/seed/rome-colosseum-viaje/900/700" alt="El Coliseo de Roma" loading="lazy" width="900" height="700"></div>
+            <div class="sc-body">
+              <p class="sc-tag">Logro 02 · RAREZA LEGENDARIA</p>
+              <h3>Roma, dos mil años de arte</h3>
+              <p>Viaje a <b>Roma</b>: Coliseo, Foro, el Vaticano y caminatas de kilómetros sin mapa.
+                 Volver con la libreta llena de bocetos de estatuas, arcos y sombras fue, sin querer,
+                 la mejor clase de arte del año.</p>
+              <ul class="sc-meta"><li>Italia</li><li>Referencias artísticas</li></ul>
+            </div>
+          </article>
+
+          <article class="stack-card" style="--i:2">
+            <div class="sc-media"><img src="https://picsum.photos/seed/london-thames-trip/900/700" alt="Londres junto al Támesis" loading="lazy" width="900" height="700"></div>
+            <div class="sc-body">
+              <p class="sc-tag">Logro 03 · RAREZA LEGENDARIA</p>
+              <h3>Londres, ciudad abierta</h3>
+              <p>Sin guía fija: museos gratis, mercadillos, el Támesis y muchas horas de inglés real.
+                 Un viaje que me sirvió para soltar el idioma y para entender que una ciudad también
+                 se diseñe como un nivel: con ritmo, sorpresas y puntos de descanso.</p>
+              <ul class="sc-meta"><li>Reino Unido</li><li>Inglés aplicado</li></ul>
+            </div>
+          </article>
+
+          <article class="stack-card" style="--i:3">
+            <div class="sc-media"><img src="https://picsum.photos/seed/padel-court-swimming-lanes/900/700" alt="Pista de pádel y calles de piscina" loading="lazy" width="900" height="700"></div>
+            <div class="sc-body">
+              <p class="sc-tag">Logro 04 · RAREZA RARA</p>
+              <h3>Pádel y natación, constancia</h3>
+              <p>El deporte es mi otra partida diaria. En el <b>pádel</b> aprendo a leer al rival y a
+                 decidir rápido; en la <b>natación</b>, a aguantar y a medir mi progreso vuelta a vuelta.
+                 La misma lógica que luego aplico al código: probar, fallar, corregir.</p>
+              <ul class="sc-meta"><li>Deporte semanal</li><li>Rutina y disciplina</li></ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ME GUSTA ============ -->
+    <section class="sec" id="gusta" aria-labelledby="gusta-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <p class="sec-num">03 / 04</p>
+            <h2 class="sec-title mask" id="gusta-title"><span>Me gusta</span></h2>
+          </div>
+          <p class="sec-note">Tres vicios sanos y una lista de reproducción de fondo</p>
+        </div>
+
+        <!-- Rejilla tipo bento, paneles de distinto tamaño -->
+        <div class="bento">
+
+          <!-- Dibujar -->
+          <article class="panel panel-lg reveal">
+            <div class="panel-media">
+              <img src="https://picsum.photos/seed/charcoal-figure-drawing/1000/700" alt="Dibujo a carboncillo sobre papel" loading="lazy" width="1000" height="700">
+            </div>
+            <div class="panel-body">
+              <p class="p-kicker">01</p>
+              <h3>Dibujar</h3>
+              <p>Carboncillo, bolígrafo y tablet. Diseño criaturas, escenarios y portadas imaginarias
+                 de juegos que nadie ha hecho todavía. Dibujar es mi forma de pensar despacio.</p>
+              <ul class="tags"><li>Personajes</li><li>Concept art</li><li>Pixel art</li></ul>
+            </div>
+          </article>
+
+          <!-- Cocinar -->
+          <article class="panel reveal" style="--d:.08s">
+            <div class="panel-body">
+              <p class="p-kicker">02</p>
+              <h3>Cocinar</h3>
+              <p>Recetas de prueba y error, como depurar código: ajustar tiempos, temperatura y
+                 cantidad hasta que sale bien. Mi especialidad, lo que me piden en casa.</p>
+              <ul class="tags"><li>Pasta</li><li>Marinado</li><li>Postres</li></ul>
+            </div>
+            <div class="panel-media sm">
+              <img src="https://picsum.photos/seed/homemade-pasta-cooking/700/500" alt="Plato de pasta casera" loading="lazy" width="700" height="500">
+            </div>
+          </article>
+
+          <!-- Videojuegos -->
+          <article class="panel reveal" style="--d:.16s">
+            <div class="panel-body">
+              <p class="p-kicker">03</p>
+              <h3>Videojuegos</h3>
+              <p>Los juego, los analizo y los desmonto mentalmente. No me preguntes qué juego es el
+                 mejor; pregúntame por qué funciona.</p>
+              <ul class="genres">
+                <li><span>Aventura / acción</span><i style="--w:92%"></i></li>
+                <li><span>RPG</span><i style="--w:88%"></i></li>
+                <li><span>Indie / pixel</span><i style="--w:80%"></i></li>
+                <li><span>Estrategia</span><i style="--w:66%"></i></li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Panel de texto ancho -->
+          <article class="panel panel-wide quote-panel reveal" style="--d:.24s">
+            <p>Dibujar me enseña composición, cocinar me enseña paciencia y jugar me enseña a
+               diseñar reglas. <b>Programar lo que quiero hacer es la única forma de juntarlo todo.</b></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MI META ============ -->
+    <section class="sec" id="meta" aria-labelledby="meta-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <p class="sec-num">04 / 04</p>
+            <h2 class="sec-title mask" id="meta-title"><span>Mi meta</span></h2>
+          </div>
+          <p class="sec-note">Quest principal en curso</p>
+        </div>
+
+        <p class="mission reveal">Quiero ser <b>desarrollador de videojuegos</b>: es lo que más me
+           interesa de la programación y el motivo por el que estudio DAM.</p>
+
+        <!-- Línea de misiones -->
+        <ol class="quests">
+          <li class="quest done reveal"><span class="q-check">✓</span><h4>Terminar 1º DAM</h4><p>Bases de programación, entornos y buenas prácticas.</p></li>
+          <li class="quest active reveal" style="--d:.1s"><span class="q-check">▸</span><h4>Dominar un motor</h4><p>Practicar a diario con Unity / Godot y C#.</p></li>
+          <li class="quest reveal" style="--d:.2s"><span class="q-check">·</span><h4>Publicar un prototipo</h4><p>Un juego pequeño, jugable y compartido.</p></li>
+          <li class="quest reveal" style="--d:.3s"><span class="q-check">·</span><h4>Game Jam</h4><p>Acabar un juego en 48 h con equipo.</p></li>
+          <li class="quest reveal" style="--d:.4s"><span class="q-check">·</span><h4>Especializarme</h4><p>Gráficos, gameplay y diseño técnico.</p></li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ PIE DE PÁGINA / CONTACTO ============ -->
+  <footer class="site-footer" id="contacto">
+    <div class="wrap footer-grid">
+
+      <!-- Marca + frase -->
+      <div class="f-brand">
+        <p class="f-mark">IGN</p>
+        <p class="f-name">Iván Gómez Navarro</p>
+        <p class="f-phrase">Arte, videojuegos y líneas de código.</p>
+        <p class="f-loc">Villarreal, Castelló · 1º DAM · IES Simarro</p>
+      </div>
+
+      <!-- Formulario de contacto (abre el cliente de correo) -->
+      <div class="f-form">
+        <h3>Hablemos</h3>
+        <p>¿Un proyecto, una game jam o simplemente hablar de juegos? Escríbeme.</p>
+        <form id="contact-form" novalidate>
+          <label>Nombre
+            <input type="text" name="nombre" placeholder="Tu nombre" required autocomplete="name">
+          </label>
+          <label>Correo
+            <input type="email" name="email" placeholder="tu@correo.com" required autocomplete="email">
+          </label>
+          <label>Mensaje
+            <textarea name="mensaje" rows="4" placeholder="Cuéntame qué necesitas…" required></textarea>
+          </label>
+          <button class="btn btn-primary" type="submit">Enviar mensaje</button>
+          <p class="f-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <!-- Enlaces de contacto -->
+      <div class="f-links">
+        <h3>Contacto directo</h3>
+        <ul>
+          <li><a href="mailto:hola@ivangomez.dev">hola@ivangomez.dev</a></li>
+          <li><a href="#" rel="me">GitHub / github.com/ivangomez</a></li>
+          <li><a href="#" rel="me">LinkedIn / in/ivangomez</a></li>
+          <li><a href="#" rel="me">itch.io / ivangomez</a></li>
+        </ul>
+        <button class="btn btn-ghost" id="copy-mail" data-mail="hola@ivangomez.dev">Copiar correo</button>
+      </div>
+    </div>
+
+    <!-- Línea inferior -->
+    <div class="wrap f-bottom">
+      <p>© <span id="year">2025</span> Iván Gómez Navarro</p>
+      <p>Hecho a mano con HTML, CSS y JavaScript puros.</p>
+      <a class="to-top" href="#inicio">Volver arriba ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

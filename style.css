@@ -143,24 +143,132 @@ a:hover, a:focus-visible { color: var(--azul); }
 .brand-txt strong { font-family: var(--fuente-titulo); font-size: .95rem; text-transform: uppercase; }
 .brand-txt em { font-family: var(--fuente-mono); font-style: normal; font-size: .68rem; color: #ffffff; }
 
-.nav ul { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.nav a {
-  font-family: var(--fuente-mono); font-size: .72rem; text-transform: uppercase;
-  letter-spacing: .06em; padding: 9px 12px; border-radius: 8px; color: #ffffff;
-  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+/* ------------------------------------------------------------
+   5. CABECERA CON FONDO DEGRADADO
+   ------------------------------------------------------------ */
+.site-header {
+  position: sticky; top: 0; z-index: 50; color: #ffffff;
+  background: var(--grad-marca); box-shadow: 0 6px 20px rgba(30, 27, 75, 0.28);
 }
-.nav a:hover, .nav a.is-active { background: #ffffff; color: var(--morado); box-shadow: var(--glow-morado); }
+.site-header::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 3px; background: var(--grad-barra);
+}
+.header-in {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding-block: 14px; position: relative; z-index: 1;
+}
+.brand { display: flex; align-items: center; gap: 12px; color: #ffffff; }
+.brand-mark {
+  font-family: var(--fuente-titulo); font-size: 1rem; font-weight: 700;
+  padding: 8px 11px; color: var(--morado); background: #ffffff;
+  border-radius: 8px; box-shadow: var(--glow-morado);
+}
+.brand-txt { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-txt strong { font-family: var(--fuente-titulo); font-size: .95rem; text-transform: uppercase; }
+.brand-txt em { font-family: var(--fuente-mono); font-style: normal; font-size: .68rem; color: #ffffff; }
 
-/* FIX CONTACTO: especificidad (0,3,1) para gobernar fondo+texto sin !important */
-.nav a.nav-cta {
-  background: #ffffff; color: var(--morado); box-shadow: var(--glow-morado);
-  border: 2px solid transparent;
-  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, border-color .2s ease;
+/* ------------------------------------------------------------
+   NAVEGACIÓN PRINCIPAL
+   Todos los botones con el mismo estilo
+   ------------------------------------------------------------ */
+.nav ul {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.nav a.nav-cta:hover { background: var(--morado); color: #ffffff; }.nav a.nav-cta:hover {
-  background: var(--morado); color: #ffffff;
-  border-color: #ffffff;            /* ← el borde blanco que pedías */
+
+/* Cada botón ocupa lo necesario y no se deforma */
+.nav li {
+  flex: 0 0 auto;
+}
+
+/* En pantallas con espacio, todos los botones van en una sola fila */
+@media (min-width: 1120px) {
+  .header-in {
+    gap: 12px;
+  }
+
+  .nav ul {
+    flex-wrap: nowrap;
+    gap: 3px;
+  }
+
+  .nav a,
+  .nav .btn-theme {
+    padding: 9px 9px;
+    font-size: .66rem;
+  }
+}
+
+/* Enlaces y botón de tema comparten el mismo aspecto */
+.nav a,
+.nav .btn-theme {
+  font-family: var(--fuente-mono);
+  font-size: .72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  box-shadow: none;
+  transition:
+    background-color .2s ease,
+    color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+/* Hover y estado activo iguales para todos */
+.nav a:hover,
+.nav a:focus-visible,
+.nav a.is-active,
+.nav .btn-theme:hover,
+.nav .btn-theme:focus-visible,
+.nav .btn-theme.is-active {
+  background: #ffffff;
+  color: var(--morado);
   box-shadow: var(--glow-morado);
+}
+
+/* Focus accesible */
+.nav a:focus-visible,
+.nav .btn-theme:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* Reset del botón de tema para que no parezca un botón del navegador */
+.nav .btn-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Icono del tema */
+.theme-icon {
+  font-size: .95rem;
+  line-height: 1;
+}
+
+/* En pantallas pequeñas ocultamos el texto del tema y reducimos botones */
+@media (max-width: 720px) {
+  .theme-text {
+    display: none;
+  }
+
+  .nav a,
+  .nav .btn-theme {
+    font-size: .66rem;
+    padding: 8px 9px;
+  }
 }
 /* ------------------------------------------------------------
    6. HERO / PORTADA
@@ -219,21 +327,108 @@ a:hover, a:focus-visible { color: var(--azul); }
 .stat-bar i { display: block; height: 100%; width: var(--w, 0); background: var(--grad-barra); border-radius: 999px; transition: width 1s ease; }
 .stat-num { font-family: var(--fuente-mono); font-size: .66rem; color: var(--morado); }
 
-.pc-load { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--linea); padding-top: 14px; font-family: var(--fuente-mono); font-size: .62rem; color: var(--texto-suave); }
-.pc-load-label { min-width: 96px; color: var(--morado); }
-.load-track { flex: 1; height: 5px; background: #ece6fb; border-radius: 999px; overflow: hidden; }
-.load-track i { display: block; height: 100%; width: 0; background: var(--grad-acento); animation: loadbar 3.6s ease-in-out infinite; }
-@keyframes loadbar { 0% { width: 0; } 70% { width: 100%; } 100% { width: 100%; opacity: 0; } }
-.pc-load-pct { min-width: 34px; text-align: right; }
+.pc-load {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--linea);
+  padding-top: 14px;
+  font-family: var(--fuente-mono);
+  font-size: .62rem;
+  color: var(--texto-suave);
+}
+
+.pc-load-label {
+  min-width: 106px;
+  color: var(--morado);
+}
+
+.load-track {
+  flex: 1;
+  height: 8px;
+  background: #ece6fb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/*
+   La barra empieza en 0%.
+   El JS irá poniendo width: X% y el texto X% sincronizados.
+*/
+.load-track i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--grad-acento);
+  border-radius: 999px;
+  animation: none; /* Evitamos que el CSS antiguo interfiera */
+  box-shadow: var(--glow-morado);
+}
+
+.pc-load-pct {
+  min-width: 44px;
+  text-align: right;
+  font-variant-numeric: tabular-nums; /* Para que los números no bailen */
+}
 
 /* ------------------------------------------------------------
-   8. CINTA DE TEXTO
+   8. CINTA DE TEXTO — bucle infinito hacia la izquierda
    ------------------------------------------------------------ */
-.ticker { margin-top: 36px; border-top: 2px solid var(--linea); border-bottom: 2px solid var(--linea); background: var(--panel); overflow: hidden; padding: 12px 0; position: relative; z-index: 1; }
-.ticker-track { display: flex; gap: 28px; width: max-content; animation: slide 28s linear infinite; }
-.ticker-track span { font-family: var(--fuente-titulo); font-size: .82rem; text-transform: uppercase; letter-spacing: .12em; color: var(--texto-suave); white-space: nowrap; }
-.ticker-track span:nth-child(4n + 1) { color: var(--morado); }
-@keyframes slide { to { transform: translateX(-50%); } }
+.ticker {
+  margin-top: 36px;
+  border-top: 2px solid var(--linea);
+  border-bottom: 2px solid var(--linea);
+  background: var(--panel);
+  overflow: hidden;
+  padding: 12px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/*
+   El track contiene DOS grupos iguales.
+   Al moverse -50%, el segundo grupo ocupa exactamente el sitio del primero.
+*/
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-left 28s linear infinite;
+  will-change: transform;
+}
+
+/*
+   Cada grupo lleva padding-right para que la separación final
+   coincida con el gap interno y el bucle sea perfecto.
+*/
+.ticker-group {
+  display: flex;
+  gap: 28px;
+  padding-right: 28px;
+}
+
+.ticker-group span {
+  font-family: var(--fuente-titulo);
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+
+/* Alternamos color para que tenga más presencia */
+.ticker-group span:nth-child(4n + 1) {
+  color: var(--morado);
+}
+
+/* Movimiento hacia la izquierda */
+@keyframes ticker-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
 
 /* ------------------------------------------------------------
    9. SECCIONES GENERALES
@@ -466,7 +661,165 @@ blockquote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0
    ------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .js .reveal { opacity: 1; transform: none; }
-  .mask > span { transform: none; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mask > span {
+    transform: none;
+  }
+
+  /* Excepción: la marquesina debe seguir moviéndose */
+  .ticker-track {
+    animation: ticker-left 28s linear infinite !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   21. MICROARREGLOS PARA JAVASCRIPT
+   ------------------------------------------------------------ */
+
+/*
+   Tu CSS original anima la máscara con:
+   .js .is-in .mask > span
+   Pero como el is-in se lo ponemos a la propia .mask,
+   añadimos esta regla para que funcione correctamente.
+*/
+.js .mask.is-in > span {
+  transform: none;
+}
+
+/*
+   Barras de habilidad:
+   empiezan vacías y JS añade .is-filled cuando entran en pantalla.
+*/
+.js .stat-bar i {
+  width: 0;
+}
+
+.js .stat-bar.is-filled i {
+  width: var(--w);
+}
+
+/* ------------------------------------------------------------
+   22. MODO OSCURO
+   Se activa con <html data-theme="dark">
+   ------------------------------------------------------------ */
+[data-theme="dark"] {
+  /* Colores base del modo oscuro */
+  --fondo: #070511;
+  --panel: #120e21;
+  --texto: #f3eeff;
+  --texto-suave: #c3bad8;
+  --linea: #32294f;
+
+  /* Fondos suaves adaptados */
+  --grad-suave: linear-gradient(160deg, rgba(167, 139, 250, 0.12), rgba(56, 189, 248, 0.08));
+
+  /* Sombras y brillos más visibles sobre fondo oscuro */
+  --glow-panel: 0 0 0 1px rgba(167, 139, 250, 0.16), 0 0 24px rgba(124, 58, 237, 0.18);
+  --sombra: 0 14px 34px rgba(0, 0, 0, 0.42);
+  --sombra-hover: 0 18px 42px rgba(124, 58, 237, 0.32);
+
+  /* Indica al navegador que use controles oscuros */
+  color-scheme: dark;
+}
+
+/* Fondo principal en modo oscuro */
+[data-theme="dark"] body {
+  background:
+    radial-gradient(900px 600px at 88% -10%, rgba(124, 58, 237, 0.22), transparent 60%),
+    radial-gradient(720px 520px at 2% 22%, rgba(37, 99, 235, 0.16), transparent 62%),
+    radial-gradient(820px 640px at 55% 115%, rgba(236, 72, 153, 0.14), transparent 62%),
+    var(--fondo);
+  background-attachment: fixed;
+}
+
+/* Marca superior: en oscuro la hacemos translúcida para que no brille demasiado */
+[data-theme="dark"] .brand-mark {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: var(--glow-azul);
+}
+
+/* Texto outline del hero */
+[data-theme="dark"] .hero-name .outline {
+  -webkit-text-stroke-color: var(--morado-claro);
+}
+
+/* Títulos y etiquetas que usaban morado fuerte: en oscuro usamos morado claro */
+[data-theme="dark"] .sec-num,
+[data-theme="dark"] .sec-title,
+[data-theme="dark"] .hero-stats dd,
+[data-theme="dark"] .sc-tag,
+[data-theme="dark"] .p-kicker,
+[data-theme="dark"] .facts dt,
+[data-theme="dark"] .stat-num,
+[data-theme="dark"] .pc-load-label,
+[data-theme="dark"] .q-check,
+[data-theme="dark"] .chips li,
+[data-theme="dark"] .sc-meta li,
+[data-theme="dark"] .tags li {
+  color: var(--morado-claro);
+}
+
+/* Negritas destacadas en modo oscuro */
+[data-theme="dark"] .hero-phrase b,
+[data-theme="dark"] .flow-col b,
+[data-theme="dark"] .mission b,
+[data-theme="dark"] .quote-panel b,
+[data-theme="dark"] .sc-body b,
+[data-theme="dark"] .pc-class b {
+  color: var(--morado-claro);
+}
+
+/* Chips y etiquetas: fondo y borde adaptados */
+[data-theme="dark"] .chips li,
+[data-theme="dark"] .sc-meta li,
+[data-theme="dark"] .tags li {
+  border-color: rgba(167, 139, 250, 0.55);
+  background: var(--grad-suave);
+}
+
+/* Barras vacías / fondos internos oscuros */
+[data-theme="dark"] .stat-bar,
+[data-theme="dark"] .genres i,
+[data-theme="dark"] .load-track {
+  background: #221a35;
+}
+
+/* Marquesina en oscuro: los morados se aclaran para que se lean bien */
+[data-theme="dark"] .ticker-group span:nth-child(4n + 1) {
+  color: var(--morado-claro);
+}
+
+/* Botón ghost en modo oscuro fuera del footer */
+[data-theme="dark"] .btn-ghost {
+  color: var(--morado-claro);
+  border-color: var(--morado-claro);
+}
+
+[data-theme="dark"] .btn-ghost:hover {
+  color: #ffffff;
+}
+
+/* Footer: lo mantenemos oscuro, pero un poco más integrado */
+[data-theme="dark"] .site-footer {
+  background: linear-gradient(135deg, #120e21 0%, #1e3a8a 55%, #2e1065 100%);
+}
+
+/* Toast en modo oscuro */
+[data-theme="dark"] .toast {
+  background: #120e21;
+  color: var(--morado-claro);
+  border-color: var(--morado-claro);
+  box-shadow: var(--glow-azul);
 }

@@ -7,7 +7,34 @@
   <title>Iván Gómez Navarro — Arte, videojuegos y código</title>
   <meta name="description" content="Marca personal de Iván Gómez Navarro: estudiante de 1º DAM en el IES Simarro, amante del arte, los videojuegos y el deporte, con la meta de ser desarrollador de videojuegos.">
   <meta name="theme-color" content="#08060f">
+<!-- ============================================================
+     Tema guardado: se aplica antes del CSS para evitar parpadeo.
+     Lee localStorage y, si no hay nada guardado, usa el sistema.
+     ============================================================ -->
+<script>
+  (function () {
+    try {
+      var theme = localStorage.getItem('ign-theme');
 
+      // Si no hay tema guardado, usamos la preferencia del sistema
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      }
+
+      // Aplicamos el tema al <html> antes de pintar la web
+      document.documentElement.dataset.theme = theme;
+
+      // Activamos estilos que dependen de JavaScript
+      document.documentElement.classList.add('js');
+    } catch (e) {
+      // Si localStorage falla, modo claro por defecto
+      document.documentElement.dataset.theme = 'light';
+      document.documentElement.classList.add('js');
+    }
+  })();
+</script>
   <!-- Tipografías: display (Chakra Petch), texto (Manrope) y monoespaciada (JetBrains Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +66,22 @@
           <li><a href="#hecho">Lo que he hecho</a></li>
           <li><a href="#gusta">Me gusta</a></li>
           <li><a href="#meta">Mi meta</a></li>
-          <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+
+          <!-- Botón de tema: oscuro / claro -->
+          <li>
+            <button
+              class="btn-theme"
+              id="theme-toggle"
+              type="button"
+              aria-pressed="false"
+              aria-label="Activar modo oscuro"
+              title="Cambiar modo oscuro/claro"
+            >
+              <span class="theme-icon" aria-hidden="true">☾</span>
+              <span class="theme-text">Oscuro</span>
+            </button>
+          </li>
         </ul>
       </nav>
     </div>
@@ -118,13 +160,22 @@
         </aside>
       </div>
 
-      <!-- Cinta de texto en movimiento -->
-      <div class="ticker" aria-hidden="true">
-        <div class="ticker-track">
-          <span>1º DAM</span><span>·</span><span>GAME DEV</span><span>·</span><span>DIBUJO</span><span>·</span><span>PÁDEL</span><span>·</span><span>NATACIÓN</span><span>·</span><span>ROMA</span><span>·</span><span>LONDRES</span><span>·</span><span>COCINA</span><span>·</span><span>PIXEL ART</span><span>·</span>
-          <span>1º DAM</span><span>·</span><span>GAME DEV</span><span>·</span><span>DIBUJO</span><span>·</span><span>PÁDEL</span><span>·</span><span>NATACIÓN</span><span>·</span><span>ROMA</span><span>·</span><span>LONDRES</span><span>·</span><span>COCINA</span><span>·</span><span>PIXEL ART</span><span>·</span>
-        </div>
-      </div>
+<!-- Cinta de texto en movimiento: bucle infinito hacia la izquierda -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+
+    <!-- Grupo principal -->
+    <div class="ticker-group">
+      <span>1º DAM</span><span>·</span><span>GAME DEV</span><span>·</span><span>DIBUJO</span><span>·</span><span>PÁDEL</span><span>·</span><span>NATACIÓN</span><span>·</span><span>ROMA</span><span>·</span><span>LONDRES</span><span>·</span><span>COCINA</span><span>·</span><span>PIXEL ART</span><span>·</span>
+    </div>
+
+    <!-- Copia exacta para cerrar el bucle sin salto visible -->
+    <div class="ticker-group" aria-hidden="true">
+      <span>1º DAM</span><span>·</span><span>GAME DEV</span><span>·</span><span>DIBUJO</span><span>·</span><span>PÁDEL</span><span>·</span><span>NATACIÓN</span><span>·</span><span>ROMA</span><span>·</span><span>LONDRES</span><span>·</span><span>COCINA</span><span>·</span><span>PIXEL ART</span><span>·</span>
+    </div>
+
+  </div>
+</div>
     </section>
 
     <!-- ============ SOBRE MÍ ============ -->

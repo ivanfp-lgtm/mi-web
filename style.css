@@ -392,7 +392,6 @@ a:hover, a:focus-visible { color: var(--azul); }
 .ticker-track {
   display: flex;
   width: max-content;
-  animation: ticker-left 48s linear infinite;
   will-change: transform;
 }
 
@@ -684,11 +683,6 @@ blockquote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0
 
   .mask > span {
     transform: none;
-  }
-
-  /* Excepción: la marquesina debe seguir moviéndose */
-  .ticker-track {
-    animation: ticker-left 28s linear infinite !important;
   }
 }
 

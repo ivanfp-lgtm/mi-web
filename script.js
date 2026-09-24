@@ -758,13 +758,15 @@
   }
 
   /* ============================================================
-     MARQUESINA: bucle infinito SIN huecos en cualquier pantalla
+     MARQUESINA: bucle infinito con VELOCIDAD CONSTANTE (rAF)
      ------------------------------------------------------------
-     La animación CSS desplaza el track -50% (un grupo). Para que
-     nunca se vea el corte, cada grupo debe medir al menos lo que
-     mide la ventana. Aquí duplicamos .ticker-seq dentro de cada
-     .ticker-group hasta cubrir el ancho visible. Solo AÑADIMOS
-     clones (nunca limpiamos), así la animación no se reinicia.
+     Movemos el track con requestAnimationFrame aplicando
+     transform: translateX() manualmente. Así la velocidad es
+     SIEMPRE la misma (px/s), sin importar el ancho del track,
+     la carga de fuentes ni el reduce-motion.
+     - Duplicamos .ticker-seq hasta cubrir la pantalla (sin huecos).
+     - Cuando x llega a -groupWidth, sumamos groupWidth: el 2º
+       grupo ocupa el sitio del 1º → bucle sin salto.
      ============================================================ */
   (function () {
     const track = doc.querySelector('.ticker-track');
@@ -773,46 +775,108 @@
     const groups = Array.from(track.querySelectorAll('.ticker-group'));
     if (!groups.length) return;
 
-    // Ancho de una secuencia base (siempre medimos la primera)
+    /*
+       VELOCIDAD en píxeles por segundo.
+       Mayor número → más rápida. Prueba entre 40 y 80.
+    */
+    const VELOCIDAD = 40;
+
+    // Ancho de una secuencia base (medimos siempre la primera)
     function seqWidth() {
       const seq = groups[0].querySelector('.ticker-seq');
       return seq ? seq.getBoundingClientRect().width : 0;
     }
 
-    // Clona secuencias hasta que cada grupo cubra la ventana
+    // Clona secuencias hasta cubrir el ancho visible
     function fitTicker() {
-      const viewport = track.parentElement.clientWidth; // ancho de .ticker
+      const viewport = track.parentElement.clientWidth;
       const w = seqWidth();
       if (!w) return;
 
-      // +1 de margen por redondeos y subpíxeles
       const need = Math.max(1, Math.ceil(viewport / w) + 1);
-
       groups.forEach(function (g) {
         const seqs = g.querySelectorAll('.ticker-seq');
         const tpl = seqs[0];
         for (let i = seqs.length; i < need; i++) {
           g.appendChild(tpl.cloneNode(true));
         }
-        // Si ya hay de sobra, no quitamos: sobrar no rompe el bucle.
       });
     }
 
-    // Primera pasada
     fitTicker();
 
-    // Repetimos cuando las fuentes terminen de cargar (el ancho puede cambiar)
-    if (doc.fonts && doc.fonts.ready) {
-      doc.fonts.ready.then(fitTicker);
-    } else {
-      window.addEventListener('load', fitTicker);
+    // Ancho de UN grupo = distancia de la vuelta (2 grupos → -50%)
+    let groupWidth = groups[0].getBoundingClientRect().width;
+
+    // Posición horizontal acumulada (negativa, avanza a la izquierda)
+    let x = 0;
+    let last = null;   // timestamp del frame anterior
+    let rafId = null;
+
+    // Normaliza x al rango (-groupWidth, 0] tras un recálculo de ancho
+    function normalizeX() {
+      if (groupWidth <= 0) return;
+      while (x <= -groupWidth) x += groupWidth;
+      while (x > 0) x -= groupWidth;
     }
 
-    // Reajustamos al cambiar el tamaño de la ventana (sin saltos)
+    function frame(now) {
+      if (last === null) last = now;
+      const dt = (now - last) / 1000; // segundos desde el último frame
+      last = now;
+
+      // Avanzamos a velocidad fija, independientemente del ancho
+      x -= VELOCIDAD * dt;
+
+      // Cierre del bucle sin salto
+      if (groupWidth > 0 && x <= -groupWidth) x += groupWidth;
+
+      track.style.transform = 'translateX(' + x + 'px)';
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function start() {
+      if (rafId !== null) return;
+      last = null; // evita un salto grande al reanudar
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function stop() {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    }
+
+    // Arrancamos y pausamos según visibilidad (ahorro de CPU)
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          e.isIntersecting ? start() : stop();
+        });
+      }, { threshold: 0 });
+      io.observe(track.parentElement);
+    } else {
+      start();
+    }
+
+    // Recalculamos clones + ancho cuando cambian fuentes o ventana
+    function remeasure() {
+      fitTicker();
+      groupWidth = groups[0].getBoundingClientRect().width;
+      normalizeX();
+    }
+
+    if (doc.fonts && doc.fonts.ready) {
+      doc.fonts.ready.then(remeasure);
+    } else {
+      window.addEventListener('load', remeasure);
+    }
+
     let rt;
     window.addEventListener('resize', function () {
       clearTimeout(rt);
-      rt = setTimeout(fitTicker, 150);
+      rt = setTimeout(remeasure, 150);
     });
   })();
 

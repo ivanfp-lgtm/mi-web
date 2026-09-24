@@ -32,26 +32,56 @@
      1. TOAST: aviso flotante reutilizable
      ============================================================ */
   function showToast(message) {
+    /*
+       Si ya había un toast (o estaba de salida), lo eliminamos antes
+       de crear el nuevo. Así nunca se acumulan ni quedan residuos.
+    */
     let toast = doc.querySelector('.toast');
-
-    // Si no existe, lo creamos
-    if (!toast) {
-      toast = doc.createElement('div');
-      toast.className = 'toast';
-      toast.setAttribute('role', 'status');
-      toast.setAttribute('aria-live', 'polite');
-      doc.body.appendChild(toast);
+    if (toast) {
+      toast.remove();
     }
 
+    // Creamos un toast nuevo en cada aviso
+    toast = doc.createElement('div');
+    toast.className = 'toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
     toast.textContent = message;
+    doc.body.appendChild(toast);
+
+    /*
+       Forzamos un reflow para que el navegador "pinte" el estado inicial
+       (sin .show) antes de añadir la clase. Sin esto, la transición de
+       entrada no se vería y aparecería de golpe.
+    */
+    void toast.offsetWidth;
     toast.classList.add('show');
 
-    // Cancelamos el temporizador anterior si existía
+    // Programamos la salida tras el tiempo de lectura
     clearTimeout(toast._hideTimer);
-
-    // Lo ocultamos automáticamente
     toast._hideTimer = setTimeout(function () {
+      // Quitamos .show para que se deslice hacia abajo (animación de salida)
       toast.classList.remove('show');
+
+      /*
+         Cuando termina la transición, borramos el elemento del DOM.
+         Al eliminarlo, ya no queda ningún trozo del cuadro asomando abajo.
+      */
+      toast.addEventListener('transitionend', function () {
+        toast.remove();
+      }, { once: true });
+
+      /*
+         Fallback por seguridad: si 'transitionend' no llega a saltar
+         (p. ej. con prefers-reduced-motion o navegadores raros),
+         lo eliminamos igualmente tras la duración de la animación.
+         500ms > los 400ms de la transición del CSS.
+      */
+      setTimeout(function () {
+        if (doc.body.contains(toast)) {
+          toast.remove();
+        }
+      }, 500);
     }, 2200);
   }
 

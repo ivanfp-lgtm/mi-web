@@ -727,4 +727,63 @@
     year.textContent = new Date().getFullYear();
   }
 
+  /* ============================================================
+     MARQUESINA: bucle infinito SIN huecos en cualquier pantalla
+     ------------------------------------------------------------
+     La animación CSS desplaza el track -50% (un grupo). Para que
+     nunca se vea el corte, cada grupo debe medir al menos lo que
+     mide la ventana. Aquí duplicamos .ticker-seq dentro de cada
+     .ticker-group hasta cubrir el ancho visible. Solo AÑADIMOS
+     clones (nunca limpiamos), así la animación no se reinicia.
+     ============================================================ */
+  (function () {
+    const track = doc.querySelector('.ticker-track');
+    if (!track) return;
+
+    const groups = Array.from(track.querySelectorAll('.ticker-group'));
+    if (!groups.length) return;
+
+    // Ancho de una secuencia base (siempre medimos la primera)
+    function seqWidth() {
+      const seq = groups[0].querySelector('.ticker-seq');
+      return seq ? seq.getBoundingClientRect().width : 0;
+    }
+
+    // Clona secuencias hasta que cada grupo cubra la ventana
+    function fitTicker() {
+      const viewport = track.parentElement.clientWidth; // ancho de .ticker
+      const w = seqWidth();
+      if (!w) return;
+
+      // +1 de margen por redondeos y subpíxeles
+      const need = Math.max(1, Math.ceil(viewport / w) + 1);
+
+      groups.forEach(function (g) {
+        const seqs = g.querySelectorAll('.ticker-seq');
+        const tpl = seqs[0];
+        for (let i = seqs.length; i < need; i++) {
+          g.appendChild(tpl.cloneNode(true));
+        }
+        // Si ya hay de sobra, no quitamos: sobrar no rompe el bucle.
+      });
+    }
+
+    // Primera pasada
+    fitTicker();
+
+    // Repetimos cuando las fuentes terminen de cargar (el ancho puede cambiar)
+    if (doc.fonts && doc.fonts.ready) {
+      doc.fonts.ready.then(fitTicker);
+    } else {
+      window.addEventListener('load', fitTicker);
+    }
+
+    // Reajustamos al cambiar el tamaño de la ventana (sin saltos)
+    let rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(fitTicker, 150);
+    });
+  })();
+
 })();

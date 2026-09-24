@@ -392,7 +392,7 @@ a:hover, a:focus-visible { color: var(--azul); }
 .ticker-track {
   display: flex;
   width: max-content;
-  animation: ticker-left 28s linear infinite;
+  animation: ticker-left 38s linear infinite;
   will-change: transform;
 }
 
@@ -404,6 +404,16 @@ a:hover, a:focus-visible { color: var(--azul); }
   display: flex;
   gap: 28px;
   padding-right: 28px;
+}
+
+/*
+   Secuencia base de la marquesina.
+   El JS clona este bloque dentro de cada grupo hasta cubrir la pantalla.
+   Mantiene el mismo gap interno para que la separación sea uniforme.
+*/
+.ticker-seq {
+  display: flex;
+  gap: 28px;
 }
 
 .ticker-group span {

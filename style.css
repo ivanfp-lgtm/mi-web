@@ -576,6 +576,41 @@ blockquote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0
 .to-top:hover { color: #ffffff; }
 
 /* ------------------------------------------------------------
+   Iconos en los enlaces de contacto
+   ------------------------------------------------------------ */
+.f-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/*
+   Enlaces que llevan icono → icono ARRIBA, texto debajo.
+   :has(.icon) solo pilla al <a> que tiene el <svg> dentro,
+   así el enlace del correo (sin icono) no se ve afectado.
+*/
+.f-links a:has(.icon) {
+  flex-direction: column;   /* 1ª fila: icono · 2ª fila: texto */
+  align-items: flex-start;  /* antes era center → ahora izquierda */
+  gap: 6px;                 /* separación vertical entre icono y texto */
+}
+
+.f-links a .icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;           /* que el icono no se deforme al encoger */
+  transition: transform .2s ease;
+}
+
+/*
+   Hover: ahora que va apilado, el desplazamiento vertical
+   pega más que el horizontal que teníamos antes.
+*/
+.f-links a:hover .icon {
+  transform: translateY(-2px);
+}
+
+/* ------------------------------------------------------------
    15. FIGURAS GEOMÉTRICAS DECORATIVAS
    Minimalista y casual: SOLO en pantallas anchas (≥1200px),
    colocadas en el MARGEN lateral (el hueco real entre el borde

@@ -880,4 +880,306 @@
     });
   })();
 
+  /* ============================================================
+   12. CONTACTO REAL A GMAIL — Web3Forms (bloque final)
+   ------------------------------------------------------------
+   Pega este bloque al final de script.js, después del })();
+   Cambia WEB3FORMS_ACCESS_KEY por tu clave real de Web3Forms.
+   Si no la cambias, el formulario seguirá abriendo el cliente
+   de correo hacia ivanfp2008@gmail.com.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  // ------------------------------------------------------------
+  // CONFIGURACIÓN
+  // ------------------------------------------------------------
+  const WEB3FORMS_ACCESS_KEY = 'PEGA_AQUI_TU_ACCESS_KEY';
+  const CONTACT_EMAIL = 'ivanfp2008@gmail.com';
+
+  // ------------------------------------------------------------
+  // TOAST LOCAL
+  // ------------------------------------------------------------
+  function showToast(message) {
+    let toast = document.querySelector('.toast');
+
+    if (toast) {
+      toast.remove();
+    }
+
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    void toast.offsetWidth;
+    toast.classList.add('show');
+
+    clearTimeout(toast._hideTimer);
+
+    toast._hideTimer = setTimeout(function () {
+      toast.classList.remove('show');
+
+      toast.addEventListener('transitionend', function () {
+        toast.remove();
+      }, { once: true });
+
+      setTimeout(function () {
+        if (document.body.contains(toast)) {
+          toast.remove();
+        }
+      }, 500);
+    }, 2200);
+  }
+
+  // ------------------------------------------------------------
+  // VALIDACIÓN BÁSICA DE EMAIL
+  // ------------------------------------------------------------
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+  }
+
+  // ------------------------------------------------------------
+  // FALLBACK MAILTO
+  // ------------------------------------------------------------
+  function mailtoFallback(form, nombre, asunto, email, mensaje) {
+    const subject = encodeURIComponent(asunto || ('Web personal — ' + nombre));
+    const body = encodeURIComponent(
+      'Nombre: ' + nombre + '\n' +
+      'Correo: ' + email + '\n' +
+      'Asunto: ' + asunto + '\n\n' +
+      mensaje
+    );
+
+    const status = form ? form.querySelector('.f-status') : null;
+
+    if (status) {
+      status.textContent = 'Abriendo tu cliente de correo…';
+    }
+
+    window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + subject + '&body=' + body;
+    showToast('Mensaje preparado');
+  }
+
+  // ------------------------------------------------------------
+  // AÑADE CAMPO ASUNTO SI NO EXISTE
+  // ------------------------------------------------------------
+  function ensureAsuntoField(form) {
+    if (form.querySelector('[name="asunto"]')) {
+      return;
+    }
+
+    const label = document.createElement('label');
+    label.appendChild(document.createTextNode('Asunto'));
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'asunto';
+    input.placeholder = 'Asunto del mensaje';
+    input.required = true;
+    input.autocomplete = 'off';
+
+    label.appendChild(input);
+
+    const emailInput = form.querySelector('[name="email"]');
+    const emailLabel = emailInput ? emailInput.closest('label') : null;
+
+    if (emailLabel) {
+      emailLabel.insertAdjacentElement('beforebegin', label);
+    } else {
+      const button = form.querySelector('button[type="submit"]');
+
+      if (button) {
+        form.insertBefore(label, button);
+      } else {
+        form.appendChild(label);
+      }
+    }
+  }
+
+  // ------------------------------------------------------------
+  // FORMULARIO DE CONTACTO REAL
+  // ------------------------------------------------------------
+  function attachContactForm(form) {
+    const status = form.querySelector('.f-status');
+    const button = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      const nombre = (data.get('nombre') || '').toString().trim();
+      const asunto = (data.get('asunto') || '').toString().trim();
+      const email = (data.get('email') || '').toString().trim();
+      const mensaje = (data.get('mensaje') || '').toString().trim();
+
+      if (!nombre || !asunto || !email || !mensaje) {
+        if (status) {
+          status.textContent = 'Rellena todos los campos.';
+        }
+
+        showToast('Faltan campos por rellenar');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        if (status) {
+          status.textContent = 'El correo no parece válido.';
+        }
+
+        showToast('Correo no válido');
+        return;
+      }
+
+      const accessKey = WEB3FORMS_ACCESS_KEY.trim();
+      const hasKey = accessKey && accessKey !== 'ba954e0b-771c-497c-9f87-5fd41a085cb0';
+      const isHttp =
+        window.location.protocol === 'http:' ||
+        window.location.protocol === 'https:';
+
+      // Si no hay clave o estamos en file://, usamos mailto.
+      if (!hasKey || !isHttp) {
+        mailtoFallback(form, nombre, asunto, email, mensaje);
+        return;
+      }
+
+      const originalText = button ? button.textContent : '';
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Enviando…';
+      }
+
+      if (status) {
+        status.textContent = 'Enviando…';
+      }
+
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            access_key: accessKey,
+            subject: asunto,
+            name: nombre,
+            email: email,
+            reply_to: email,
+            message: mensaje
+          })
+        });
+
+        const result = await response.json().catch(function () {
+          return {};
+        });
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Error Web3Forms');
+        }
+
+        if (status) {
+          status.textContent = 'Mensaje enviado. Te responderé pronto.';
+        }
+
+        showToast('Mensaje enviado');
+        form.reset();
+      } catch (error) {
+        console.error('Web3Forms error:', error);
+
+        if (status) {
+          status.textContent =
+            'No se pudo enviar. Puedes escribirme a ' + CONTACT_EMAIL + '.';
+        }
+
+        showToast('No se pudo enviar');
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText || 'Enviar mensaje';
+        }
+      }
+    });
+  }
+
+  // ------------------------------------------------------------
+  // COPIAR CORREO REAL
+  // ------------------------------------------------------------
+  function attachCopyButton(button) {
+    button.addEventListener('click', async function () {
+      const mail = button.dataset.mail || CONTACT_EMAIL;
+      let copied = false;
+
+      try {
+        await navigator.clipboard.writeText(mail);
+        copied = true;
+      } catch (e) {
+        copied = false;
+      }
+
+      if (!copied) {
+        const textarea = document.createElement('textarea');
+        textarea.value = mail;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+          copied = document.execCommand('copy');
+        } catch (e) {
+          copied = false;
+        }
+
+        textarea.remove();
+      }
+
+      showToast(copied ? 'Correo copiado' : 'No se pudo copiar el correo');
+    });
+  }
+
+  // ------------------------------------------------------------
+  // ACTUALIZAR ENLACE DE CORREO VISIBLE
+  // ------------------------------------------------------------
+  const mailLink = document.querySelector('.f-links a[href^="mailto:"]');
+
+  if (mailLink) {
+    mailLink.setAttribute('href', 'mailto:' + CONTACT_EMAIL);
+    mailLink.textContent = CONTACT_EMAIL;
+  }
+
+  // ------------------------------------------------------------
+  // SUSTITUIR FORMULARIO ANTIGUO
+  // ------------------------------------------------------------
+  const form = document.getElementById('contact-form');
+
+  if (form) {
+    ensureAsuntoField(form);
+
+    const cleanForm = form.cloneNode(true);
+    form.replaceWith(cleanForm);
+
+    attachContactForm(cleanForm);
+  }
+
+  // ------------------------------------------------------------
+  // SUSTITUIR BOTÓN DE COPIAR ANTIGUO
+  // ------------------------------------------------------------
+  const copyButton = document.getElementById('copy-mail');
+
+  if (copyButton) {
+    const cleanCopy = copyButton.cloneNode(true);
+    cleanCopy.setAttribute('data-mail', CONTACT_EMAIL);
+
+    copyButton.replaceWith(cleanCopy);
+
+    attachCopyButton(cleanCopy);
+  }
+})();
+
 })();

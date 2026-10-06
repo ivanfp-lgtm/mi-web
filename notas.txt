@@ -2,3 +2,10 @@ Te voy a dar mis archicos html, css, y js, para asi refrescarte la memoria y vea
 HTML:
 CSS:
 JS:
+
+Ahora es momento de una de las partes más ambiciosas del proyecto, quiero que en "cosas que me gustan" en el apartado de dibujar" haya un botón llamado "Museo de OCs" en el que si pulsa, se abra una nueca ventana en un entorno 3D. Voy a especificar:
+- Una habitación cubica con 3 cuadros (imagenes), a las cuales se les añadira un marco, si la imagen no es cuadrada, se verá solo el centro de la imagen. 1 cuadro por pared, 1 pared vacia.
+- Los colores de la habitación dependen del modo claro/oscuro.
+- Un pequeño cuadro informativo debajo de cada cuadro, que al hacer click en el, aparezca la imformación en una nota que se vea como una imagen en pantalla, y un boton para dejar de leer.
+- La camara en primera persona, solo se mueve si se mantiene el click derecho del ratón, y mientras se mantiene, no puede salir de la ventana.
+- Una barra en la parte superior, que no forma parte del entorno 3D, donde explique como mantener la camara, y un boton para volver a la web.

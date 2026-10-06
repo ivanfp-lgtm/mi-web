@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Museo de OCs — Iván Gómez Navarro</title>
+
+  <!-- Tema: se aplica antes del CSS (igual que en index.html) -->
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('ign-theme');
+        if (theme !== 'dark' && theme !== 'light') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="museo.css">
+</head>
+<body>
+
+  <!-- ===== BARRA SUPERIOR (HUD, fuera del entorno 3D) ===== -->
+  <div class="hud" id="hud">
+    <p class="hud-help">
+      <b>WASD / flechas</b> para caminar ·
+      <b>Click derecho mantenido</b> + ratón para mirar ·
+      <b>Click izquierdo</b> sobre un cuadro para ver su ficha
+    </p>
+    <button class="hud-back" id="hud-back" type="button">← Volver a la web</button>
+  </div>
+
+  <!-- ===== ESCENA 3D (la habitación se construye en JS) ===== -->
+  <div class="viewport" id="viewport">
+    <div class="world" id="world"><!-- paredes generadas por JS --></div>
+    <div class="crosshair" aria-hidden="true"></div>
+  </div>
+
+  <!-- ===== NOTA INFORMATIVA (imagen a pantalla) ===== -->
+  <div class="note" id="note" role="dialog" aria-modal="true" aria-labelledby="note-title" hidden>
+    <div class="note-card">
+      <div class="note-media"><img id="note-img" alt=""></div>
+      <div class="note-text">
+        <h2 id="note-title"></h2>
+        <p id="note-desc"></p>
+      </div>
+      <button class="note-close" id="note-close" type="button">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="museo.js"></script>
+</body>
+</html>

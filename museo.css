@@ -1,0 +1,263 @@
+/* ============================================================
+   museo.css — Habitación 3D (CSS puro) + HUD + nota
+   Colores según [data-theme="light|dark"]
+   ============================================================ */
+
+/* ---------- Variables por tema ---------- */
+:root {
+  --fuente-texto: "Manrope", system-ui, sans-serif;
+  --fuente-titulo: "Chakra Petch", system-ui, sans-serif;
+  --fuente-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Geometría de la habitación */
+  --room: 5200px;       /* ANCHO de la sala (X y Z) */
+  --half: 2600px;       /* mitad del ancho */
+  --alto: 2400px;       /* ALTURA de la sala (techo-suelo) -> más baja para no flotar */
+  --halfY: 1200px;      /* mitad de la altura */
+  --persp: 1500px;      /* perspectiva (campo de visión) */
+
+  --cuadro: 950px;      /* tamaño del lienzo (cuadrado) */
+  --marco: 40px;        /* grosor del marco */
+}
+
+/* TEMA CLARO */
+:root,
+[data-theme="light"] {
+  --pared: #efe9fb;
+  --pared-sombra: #d9d0f0;
+  --suelo: #cfc6e6;
+  --techo: #f6f2ff;
+  --linea-pared: rgba(124, 58, 237, 0.10);
+  --marco-color: linear-gradient(135deg, #7c3aed, #2563eb 55%, #ec4899);
+  --placa-bg: #ffffff;
+  --placa-texto: #1b1730;
+  --placa-suave: #5b5470;
+  --hud-bg: rgba(246, 244, 252, 0.90);
+  --hud-texto: #1b1730;
+  --hud-acento: #7c3aed;
+  --nota-fondo: rgba(27, 23, 48, 0.55);
+  --nota-card: #ffffff;
+  --nota-texto: #1b1730;
+}
+
+/* TEMA OSCURO */
+[data-theme="dark"] {
+  --pared: #160f28;
+  --pared-sombra: #0c0817;
+  --suelo: #0a0714;
+  --techo: #1c1433;
+  --linea-pared: rgba(167, 139, 250, 0.12);
+  --marco-color: linear-gradient(135deg, #a78bfa, #38bdf8 55%, #fbcfe8);
+  --placa-bg: #120e21;
+  --placa-texto: #f3eeff;
+  --placa-suave: #c3bad8;
+  --hud-bg: rgba(12, 8, 23, 0.92);
+  --hud-texto: #f3eeff;
+  --hud-acento: #c4b5fd;
+  --nota-fondo: rgba(0, 0, 0, 0.66);
+  --nota-card: #120e21;
+  --nota-texto: #f3eeff;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: var(--pared);
+  font-family: var(--fuente-texto);
+  color: var(--hud-texto);
+}
+
+/* ============================================================
+   HUD (barra superior, NO forma parte del 3D)
+   ============================================================ */
+.hud {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  padding: 12px 18px;
+  background: var(--hud-bg);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--linea-pared);
+}
+.hud-help { margin: 0; font-family: var(--fuente-mono); font-size: .82rem; color: var(--hud-texto); }
+.hud-help b { color: var(--hud-acento); font-weight: 600; }
+
+.hud-back {
+  font-family: var(--fuente-titulo); font-size: .8rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em;
+  padding: 10px 18px; border-radius: 8px; cursor: pointer;
+  color: #fff; border: 2px solid transparent;
+  background: linear-gradient(120deg, #7c3aed, #2563eb);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.hud-back:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(124,58,237,.4); }
+
+/* ============================================================
+   ESCENA 3D
+   ============================================================ */
+.viewport {
+  position: fixed; inset: 0;
+  perspective: var(--persp);
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+  background: var(--pared);
+  cursor: grab;
+}
+.viewport.looking { cursor: grabbing; }
+
+.world {
+  position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0;
+  transform-style: preserve-3d;
+  /* El JS pone: rotateX(-pitch) rotateY(-yaw) translate3d(-pos) */
+}
+
+/* Paredes: ancho = --room, alto = --alto (más baja para no flotar) */
+.face {
+  position: absolute;
+  width: var(--room); height: var(--alto);
+  left: calc(var(--room) / -2); top: calc(var(--alto) / -2);
+  background: var(--pared);
+  transform-style: preserve-3d;
+  display: flex; align-items: center; justify-content: center;
+  /* FIX "pantalla tapada": oculta cualquier cara que quede DETRÁS
+     de la cámara (sin esto, se proyecta al revés y cubre la pantalla) */
+  backface-visibility: hidden;
+}
+
+/* Paredes laterales/frente/fondo: usan --half en X/Z y --alto en Y */
+.face--front  { transform: translateZ(calc(var(--half) * -1)); }
+.face--back   { transform: translateZ(var(--half)) rotateY(180deg); }
+.face--right  { transform: translateX(var(--half)) rotateY(-90deg); }
+.face--left   { transform: translateX(calc(var(--half) * -1)) rotateY(90deg); }
+
+/* Suelo y techo: cuadrados de lado --room (para cubrir X y Z),
+   colocados a --halfY de altura (no --half) → cerca del jugador */
+.face--floor  { height: var(--room); top: calc(var(--room) / -2);
+  transform: translateY(var(--halfY)) rotateX(90deg); background: var(--suelo); }
+.face--ceiling{ height: var(--room); top: calc(var(--room) / -2);
+  transform: translateY(calc(var(--halfY) * -1)) rotateX(-90deg); background: var(--techo); }
+
+/* ============================================================
+   CUADRO (marco + lienzo recortado al centro) + PLACA
+   ============================================================ */
+.painting {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateZ(2px);
+  display: flex; flex-direction: column; align-items: center; gap: 26px;
+  cursor: pointer;
+}
+.painting-frame {
+  width: var(--cuadro); height: var(--cuadro);
+  padding: var(--marco);
+  background: var(--marco-color);
+  border-radius: 6px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.35), 0 0 0 2px rgba(0,0,0,.25);
+}
+.painting-canvas {
+  width: 100%; height: 100%;
+  background: #0b0714;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 6px rgba(255,255,255,.06);
+}
+.painting-canvas img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.painting-plaque {
+  width: calc(var(--cuadro) * 0.62);
+  padding: 18px 22px;
+  background: var(--placa-bg);
+  color: var(--placa-texto);
+  border-radius: 8px;
+  border: 1px solid var(--linea-pared);
+  box-shadow: 0 12px 28px rgba(0,0,0,.25);
+  text-align: center;
+  transform: translateZ(2px);
+}
+.painting-plaque h3 {
+  margin: 0 0 6px; font-family: var(--fuente-titulo);
+  font-size: 26px; text-transform: uppercase; letter-spacing: .02em;
+}
+.painting-plaque p { margin: 0; font-family: var(--fuente-mono); font-size: 15px; color: var(--placa-suave); }
+
+.painting.aimed .painting-frame { box-shadow: 0 0 0 6px #ec4899, 0 30px 60px rgba(236,72,153,.45); }
+.painting.aimed .painting-plaque { border-color: #ec4899; box-shadow: 0 0 22px rgba(236,72,153,.5); }
+
+/* ============================================================
+   CROSSHAIR
+   ============================================================ */
+.crosshair {
+  position: fixed; top: 50%; left: 50%;
+  width: 14px; height: 14px; margin: -7px 0 0 -7px;
+  border: 2px solid #ec4899; border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.4);
+  pointer-events: none; z-index: 40;
+}
+
+/* ============================================================
+   NOTA A PANTALLA (cuadrado fijo + ficha + cerrar)
+   ============================================================ */
+.note {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+  background: var(--nota-fondo);
+  backdrop-filter: blur(4px);
+  padding: 24px;
+}
+.note[hidden] { display: none; }
+.note-card {
+  width: min(920px, 94vw); max-height: 88vh;
+  display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 24px;
+  background: var(--nota-card); color: var(--nota-texto);
+  border: 1px solid var(--linea-pared); border-radius: 14px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5);
+  padding: 24px; overflow: hidden;
+}
+.note-media {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #0b0714;
+  border-radius: 8px;
+  min-height: 0;
+}
+.note-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.note-text { display: flex; flex-direction: column; min-height: 0; }
+.note-text h2 { margin: 0 0 12px; font-family: var(--fuente-titulo); text-transform: uppercase; font-size: 1.6rem; }
+.note-text p { margin: 0; line-height: 1.6; color: var(--placa-suave); overflow: auto; }
+.note-close {
+  grid-column: 1 / -1;
+  justify-self: center;
+  font-family: var(--fuente-titulo); font-size: .85rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em;
+  padding: 11px 26px; border-radius: 8px; cursor: pointer;
+  color: #fff; border: 0; background: linear-gradient(120deg, #7c3aed, #2563eb);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.note-close:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(124,58,237,.4); }
+
+@media (max-width: 720px) {
+  .note-card { grid-template-columns: 1fr; }
+  .hud-help { font-size: .72rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hud-back, .note-close { transition: none; }
+}
+
+/* FIX: ocultar la cara trasera de los cuadros (igual que las paredes)
+   Así, cuando la pared se oculta por estar detrás de la cámara,
+   el cuadro desaparece con ella y no se ve "flotando" por detrás. */
+.painting,
+.painting * {
+  backface-visibility: hidden;
+}

@@ -862,3 +862,6 @@ blockquote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0
   border-color: var(--morado-claro);
   box-shadow: var(--glow-azul);
 }
+
+/* Botón "Museo de OCs" dentro de los paneles */
+.panel-body .museo-btn { margin-top: 16px; }

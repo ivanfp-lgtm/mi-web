@@ -261,3 +261,54 @@ html, body {
 .painting * {
   backface-visibility: hidden;
 }
+
+/* ============================================================
+   CAPA TÁCTIL (móvil) — se activa solo en dispositivos de puntero grueso
+   ============================================================ */
+
+/* Evita scroll/zoom nativos al arrastrar en la escena */
+.viewport { touch-action: none; }
+
+/* En móvil no hay crosshair (se apunta tocando el cuadro) */
+@media (hover: none) and (pointer: coarse) {
+  .crosshair { display: none; }
+}
+
+/* Joystick virtual (solo existe en el DOM si es móvil) */
+.joy {
+  position: fixed;
+  left: 22px;
+  bottom: 22px;
+  width: 132px;
+  height: 132px;
+  z-index: 45;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.12);
+  border: 2px solid var(--hud-acento);
+  box-shadow: 0 0 18px rgba(124,58,237,.25);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.joy::after {
+  content: "MOVER";
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--hud-acento);
+  opacity: .55;
+  pointer-events: none;
+}
+.joy-nub {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 56px; height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: var(--marco-color);
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  pointer-events: none;
+}

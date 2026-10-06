@@ -353,6 +353,29 @@
     if (!esMovil) actualizarApuntado(); else limpiarAimed();
     requestAnimationFrame(loop);
   }
+    /* ---- Forzar modo horizontal (como un juego móvil) ----
+     Al tocar el aviso de giro: pantalla completa + bloqueo
+     horizontal cuando el navegador lo permite (Android). En iOS
+     el bloqueo no está soportado, pero el aviso CSS ya obliga a
+     girar y el museo se ve lateral al ponerlo en horizontal. */
+  if (esMovil) {
+    const ro = document.getElementById('rotate-overlay');
+    if (ro) {
+      ro.addEventListener('click', function () {
+        try {
+          const p = document.documentElement.requestFullscreen &&
+                    document.documentElement.requestFullscreen();
+          const lock = function () {
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock('landscape').catch(function () {});
+            }
+          };
+          if (p && p.then) p.then(lock).catch(function () {});
+          else lock();
+        } catch (e) {}
+      });
+    }
+  }
   requestAnimationFrame(loop);
 
 })();

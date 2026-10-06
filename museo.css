@@ -312,3 +312,44 @@ html, body {
   box-shadow: 0 6px 16px rgba(0,0,0,.35);
   pointer-events: none;
 }
+
+/* ============================================================
+   MÓVIL: ocultar texto de controles + "MOVER" del joystick
+   (solo en puntero grueso; el escritorio no se ve afectado)
+   ============================================================ */
+@media (hover: none) and (pointer: coarse) {
+  .hud-help { display: none; }                 /* sin texto de controles */
+  .hud { justify-content: flex-end; }          /* el botón "Volver" a la derecha */
+  .joy::after { display: none; }               /* quita el rótulo "MOVER" */
+}
+
+/* ============================================================
+   MODO HORIZONTAL OBLIGATORIO (como un juego de móvil)
+   En vertical se tapa el museo y se pide girar; en horizontal
+   ya se ve lateral y aparece el joystick.
+   ============================================================ */
+#rotate-overlay {
+  position: fixed; inset: 0; z-index: 45;       /* bajo el HUD (50): el "Volver" sigue pulsable */
+  display: none;                                /* oculto por defecto; solo vertical móvil */
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 24px; text-align: center;
+  background: var(--pared);                     /* opaco: tapa el museo mientras estás en vertical */
+  color: var(--hud-texto);
+  font-family: var(--fuente-mono);
+}
+#rotate-overlay .ro-icon {
+  width: 84px; height: 84px; color: var(--hud-acento);
+  animation: ro-rotar 2.6s ease-in-out infinite;
+}
+#rotate-overlay p { margin: 0; font-size: 1rem; letter-spacing: .04em; }
+@keyframes ro-rotar {
+  0%, 18% { transform: rotate(0deg); }
+  52%, 82% { transform: rotate(90deg); }
+  100% { transform: rotate(90deg); }
+}
+
+/* Solo en móvil/tablet en VERTICAL: aparece el aviso y se esconde el joystick */
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  #rotate-overlay { display: flex; }
+  .joy { display: none; }
+}

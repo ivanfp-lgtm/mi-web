@@ -894,7 +894,7 @@
   // ------------------------------------------------------------
   // CONFIGURACIÓN
   // ------------------------------------------------------------
-  const WEB3FORMS_ACCESS_KEY = 'PEGA_AQUI_TU_ACCESS_KEY';
+  const WEB3FORMS_ACCESS_KEY = 'ba954e0b-771c-497c-9f87-5fd41a085cb0';
   const CONTACT_EMAIL = 'ivanfp2008@gmail.com';
 
   // ------------------------------------------------------------
@@ -1035,7 +1035,7 @@
       }
 
       const accessKey = WEB3FORMS_ACCESS_KEY.trim();
-      const hasKey = accessKey && accessKey !== 'ba954e0b-771c-497c-9f87-5fd41a085cb0';
+      const hasKey = accessKey && accessKey !== 'PEGA_AQUI_TU_ACCESS_KEY';
       const isHttp =
         window.location.protocol === 'http:' ||
         window.location.protocol === 'https:';

@@ -353,3 +353,44 @@ html, body {
   #rotate-overlay { display: flex; }
   .joy { display: none; }
 }
+
+/* ============================================================
+   FICHA ADAPTABLE Y UNIFORME (escritorio + móvil)
+   - Imagen cuadrada del MISMO lado para los 3 cuadros.
+   - El lado está ligado a la ventana (vmin), no al ancho de
+     columna → en pantallas grandes la imagen crece y no deja
+     hueco; en pequeñas se reduce.
+   - El texto scrollea por dentro y el botón de cerrar siempre
+     se ve. Si aun así no cabe, la ficha scrollea (overflow auto).
+   ============================================================ */
+.note { padding: 12px; }
+
+.note-card {
+  /* col. imagen = lado cuadrado máx. ligado a vmin · col. texto = resto */
+  grid-template-columns: minmax(0, min(46vmin, 44vw)) minmax(0, 1fr);
+  overflow: hidden auto;          /* scroll de emergencia si no cabe */
+}
+
+.note-media {
+  width: 100%;
+  aspect-ratio: 1 / 1;            /* cuadrado uniforme los 3 */
+  justify-self: center;
+  align-self: start;
+  min-height: 0;
+  overflow: hidden;
+  background: #0b0714;
+  border-radius: 8px;
+}
+.note-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;              /* recorte al centro, misma distribución */
+  object-position: center;
+  display: block;
+}
+
+.note-text {
+  align-self: start;
+  min-height: 0;
+  max-height: 70vh;               /* scrollea el texto, no empuja el botón */
+  overflow-y: auto;
+}

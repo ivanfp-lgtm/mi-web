@@ -14,7 +14,7 @@
   --half: 2600px;       /* mitad del ancho */
   --alto: 2400px;       /* ALTURA de la sala (techo-suelo) -> más baja para no flotar */
   --halfY: 1200px;      /* mitad de la altura */
-  --persp: 1500px;      /* perspectiva (campo de visión) */
+  --persp: 140vmin;     /* perspectiva proporcional a la ventana → FOV constante */
 
   --cuadro: 950px;      /* tamaño del lienzo (cuadrado) */
   --marco: 40px;        /* grosor del marco */

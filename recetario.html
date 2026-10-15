@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08060f">
+  <title>Recetario de hamburguesas — Iván Gómez Navarro</title>
+
+  <!-- Tema: se aplica antes del CSS (igual que en index.html) -->
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('ign-theme');
+        if (theme !== 'dark' && theme !== 'light') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+        var tm = document.querySelector('meta[name="theme-color"]');
+        if (tm) tm.setAttribute('content', theme === 'dark' ? '#08060f' : '#f6f4fc');
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+        var tm2 = document.querySelector('meta[name="theme-color"]');
+        if (tm2) tm2.setAttribute('content', '#f6f4fc');
+      }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="recetario.css">
+</head>
+<body>
+
+  <!-- ===== BARRA SUPERIOR ===== -->
+  <header class="rec-hud">
+    <button class="hud-back" id="btn-web" type="button">← Volver a la web</button>
+    <p class="hud-title">Recetario <span>·</span> Hamburguesas</p>
+    <span class="hud-spacer" aria-hidden="true"></span>
+  </header>
+
+  <main>
+
+    <!-- ===== PANTALLA 1 · MENÚ ===== -->
+    <section class="pantalla activa" id="pantalla-menu">
+      <div class="wrap">
+        <p class="kicker">cocina · mi especialidad</p>
+        <h1 class="page-title">Elige tu hamburguesa</h1>
+        <p class="intro">Cinco recetas que son mías, resultado de probar cosas nuevas.
+           Abre una, pulsa <b>Preparar</b>… y monta la hamburguesa en el orden correcto.</p>
+        <div class="grid-burgers" id="grid-burgers"><!-- JS --></div>
+      </div>
+    </section>
+
+    <!-- ===== PANTALLA 3 · JUEGO ===== -->
+    <section class="pantalla" id="pantalla-juego">
+      <div class="juego-top">
+        <button class="btn btn-ghost" id="btn-salir" type="button">← Menú</button>
+        <h2 id="juego-nombre">Hamburguesa</h2>
+        <button class="btn btn-ghost" id="btn-reset" type="button">Reiniciar</button>
+      </div>
+
+      <div class="juego-campo">
+        <!-- Plato con las capas apiladas -->
+        <div class="plato-zona">
+          <p class="mensaje-error" id="mensaje-error" aria-live="polite"></p>
+          <div class="plato">
+            <div class="plato-capas" id="plato-capas"></div>
+            <div class="plato-base" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <!-- Lista de pasos -->
+        <aside class="pasos-caja">
+          <h3>Pasos</h3>
+          <ol class="pasos" id="lista-pasos"><!-- JS --></ol>
+        </aside>
+      </div>
+
+      <!-- Inventario deslizable -->
+      <div class="bandeja">
+        <p class="bandeja-hint">Arrastra los ingredientes al plato, en orden</p>
+        <div class="inventario" id="inventario"><!-- JS --></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== PANTALLA 2 · FICHA (modal) ===== -->
+  <div class="capa" id="ficha" role="dialog" aria-modal="true" aria-labelledby="ficha-nombre" hidden>
+    <div class="ficha-card">
+      <div class="ficha-media"><img id="ficha-img" alt=""></div>
+      <div class="ficha-texto">
+        <p class="kicker" id="ficha-kicker">receta</p>
+        <h2 id="ficha-nombre"></h2>
+        <p id="ficha-desc"></p>
+        <div class="ficha-acciones">
+          <button class="btn btn-ghost" id="btn-menu" type="button">← Menú</button>
+          <button class="btn btn-primary" id="btn-preparar" type="button">Preparar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PANTALLA 4 · FELICITACIÓN ===== -->
+  <div class="capa" id="fin" role="dialog" aria-modal="true" aria-labelledby="fin-titulo" hidden>
+    <div class="fin-card">
+      <p class="fin-emoji" aria-hidden="true">🍔</p>
+      <h2 id="fin-titulo">¡Hamburguesa completada!</h2>
+      <p id="fin-texto"></p>
+      <div class="fin-acciones">
+        <button class="btn btn-ghost" id="btn-fin-menu" type="button">← Menú</button>
+        <button class="btn btn-primary" id="btn-fin-web" type="button">Volver a la web</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capa de confeti -->
+  <canvas id="confeti" aria-hidden="true"></canvas>
+
+  <script src="recetario.js"></script>
+</body>
+</html>

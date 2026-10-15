@@ -3,6 +3,11 @@ HTML:
 CSS:
 JS:
 
+Ahora también tenemos un "museo de OCs" con sus respectivos html, css, y js. Son los siguientes:
+HTML:
+CSS:
+JS:
+
 Ahora es momento de una de las partes más ambiciosas del proyecto, quiero que en "cosas que me gustan" en el apartado de dibujar" haya un botón llamado "Museo de OCs" en el que si pulsa, se abra una nueca ventana en un entorno 3D. Voy a especificar:
 - Una habitación cubica con 3 cuadros (imagenes), a las cuales se les añadira un marco, si la imagen no es cuadrada, se verá solo el centro de la imagen. 1 cuadro por pared, 1 pared vacia.
 - Los colores de la habitación dependen del modo claro/oscuro.

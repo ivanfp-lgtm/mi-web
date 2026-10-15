@@ -131,31 +131,6 @@ a:hover, a:focus-visible { color: var(--azul); }
 }
 .header-in {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 20px; padding-block: 14px; position: relative; z-index: 1;
-}
-.brand { display: flex; align-items: center; gap: 12px; color: #ffffff; }
-.brand-mark {
-  font-family: var(--fuente-titulo); font-size: 1rem; font-weight: 700;
-  padding: 8px 11px; color: var(--morado); background: #ffffff;
-  border-radius: 8px; box-shadow: var(--glow-morado);
-}
-.brand-txt { display: flex; flex-direction: column; line-height: 1.2; }
-.brand-txt strong { font-family: var(--fuente-titulo); font-size: .95rem; text-transform: uppercase; }
-.brand-txt em { font-family: var(--fuente-mono); font-style: normal; font-size: .68rem; color: #ffffff; }
-
-/* ------------------------------------------------------------
-   5. CABECERA CON FONDO DEGRADADO
-   ------------------------------------------------------------ */
-.site-header {
-  position: sticky; top: 0; z-index: 50; color: #ffffff;
-  background: var(--grad-marca); box-shadow: 0 6px 20px rgba(30, 27, 75, 0.28);
-}
-.site-header::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0;
-  height: 3px; background: var(--grad-barra);
-}
-.header-in {
-  display: flex; align-items: center; justify-content: space-between;
   gap: 12px; padding-block: 14px; position: relative; z-index: 1;
 }
 .brand { display: flex; align-items: center; gap: 12px; color: #ffffff; }

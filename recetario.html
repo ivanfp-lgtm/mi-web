@@ -35,7 +35,7 @@
   <!-- ===== BARRA SUPERIOR ===== -->
   <header class="rec-hud">
     <button class="hud-back" id="btn-web" type="button">← Volver a la web</button>
-    <p class="hud-title">Recetario <span>·</span> Hamburguesas</p>
+    <p class="hud-title">Recetario <span>de</span> Hamburguesas</p>
     <span class="hud-spacer" aria-hidden="true"></span>
   </header>
 
@@ -102,17 +102,13 @@
     </div>
   </div>
 
-  <!-- ===== PANTALLA 4 · FELICITACIÓN ===== -->
-  <div class="capa" id="fin" role="dialog" aria-modal="true" aria-labelledby="fin-titulo" hidden>
-    <div class="fin-card">
-      <p class="fin-emoji" aria-hidden="true">🍔</p>
-      <h2 id="fin-titulo">¡Hamburguesa completada!</h2>
-      <p id="fin-texto"></p>
-      <div class="fin-acciones">
-        <button class="btn btn-ghost" id="btn-fin-menu" type="button">← Menú</button>
-        <button class="btn btn-primary" id="btn-fin-web" type="button">Volver a la web</button>
-      </div>
-    </div>
+  <!-- ===== AVISO DE ÉXITO (entra desde arriba, no bloquea) ===== -->
+  <div id="toast" role="status" aria-live="polite">
+    <span class="toast-emoji" aria-hidden="true">🍔</span>
+    <span class="toast-texto">
+      <span class="toast-titulo">¡Hamburguesa completada!</span>
+      <span class="toast-msg" id="toast-msg"></span>
+    </span>
   </div>
 
   <!-- Capa de confeti -->

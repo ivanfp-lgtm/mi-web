@@ -1,0 +1,426 @@
+/* ============================================================
+   recetario.css — Menú + ficha + minijuego (drag&drop) + confeti
+   Mismas variables y tema que la web (ign-theme)
+   ============================================================ */
+
+/* ---------- Variables por tema ---------- */
+:root {
+  --morado: #7c3aed;
+  --morado-claro: #a78bfa;
+  --azul: #2563eb;
+  --azul-claro: #38bdf8;
+  --rosa: #ec4899;
+
+  --fondo: #f6f4fc;
+  --panel: #ffffff;
+  --texto: #1b1730;
+  --texto-suave: #5b5470;
+  --linea: #ddd6f0;
+
+  --grad-acento: linear-gradient(120deg, var(--morado), var(--azul));
+  --grad-barra: linear-gradient(90deg, var(--morado), var(--azul) 60%, var(--rosa));
+  --grad-suave: linear-gradient(160deg, rgba(124, 58, 237, 0.07), rgba(37, 99, 235, 0.06));
+  --glow-morado: 0 0 16px rgba(124, 58, 237, 0.30);
+  --sombra: 0 12px 32px rgba(30, 27, 75, 0.10);
+  --sombra-hover: 0 16px 40px rgba(124, 58, 237, 0.22);
+
+  --fuente-texto: "Manrope", system-ui, sans-serif;
+  --fuente-titulo: "Chakra Petch", system-ui, sans-serif;
+  --fuente-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Plato (imagen): ajusta estos dos si quieres afinar */
+  --plato-img: 150%;      /* tamaño del plato (mayor = plato más grande) */
+  --plato-apoyo: 34.5%;   /* altura del centro del plato (donde apilan) */
+}
+
+[data-theme="dark"] {
+  --fondo: #070511;
+  --panel: #120e21;
+  --texto: #f3eeff;
+  --texto-suave: #c3bad8;
+  --linea: #32294f;
+  --grad-suave: linear-gradient(160deg, rgba(167, 139, 250, 0.12), rgba(56, 189, 248, 0.08));
+  --sombra: 0 14px 34px rgba(0, 0, 0, 0.42);
+  --sombra-hover: 0 18px 42px rgba(124, 58, 237, 0.32);
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--fuente-texto);
+  line-height: 1.6;
+  color: var(--texto);
+  background:
+    radial-gradient(900px 600px at 88% -10%, rgba(124, 58, 237, 0.14), transparent 60%),
+    radial-gradient(720px 520px at 2% 22%, rgba(37, 99, 235, 0.10), transparent 62%),
+    var(--fondo);
+  min-height: 100vh;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3 { margin: 0; font-family: var(--fuente-titulo); text-transform: uppercase; line-height: 1.1; }
+p { margin: 0 0 1em; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+.wrap { width: 100%; max-width: 980px; margin-inline: auto; padding: 0 20px; }
+
+/* ---------- Botones (mismo estilo que la web) ---------- */
+.btn {
+  display: inline-block; font-family: var(--fuente-titulo); font-size: .82rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+  padding: 13px 24px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, background-position .4s ease, color .2s ease;
+}
+.btn:hover, .btn:focus-visible { transform: translateY(-2px); color: #ffffff; }
+.btn-primary { color: #ffffff; background: var(--grad-acento); background-size: 180% 100%; box-shadow: var(--glow-morado); }
+.btn-primary:hover { background-position: 100% 0; }
+.btn-ghost { background: transparent; color: var(--morado); border-color: var(--morado); }
+.btn-ghost:hover { background: var(--grad-acento); border-color: transparent; }
+[data-theme="dark"] .btn-ghost { color: var(--morado-claro); border-color: var(--morado-claro); }
+[data-theme="dark"] .btn-ghost:hover { color: #ffffff; }
+
+/* ---------- HUD superior ---------- */
+.rec-hud {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 18px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--linea);
+  box-shadow: var(--sombra);
+}
+.hud-back {
+  font-family: var(--fuente-titulo); font-size: .8rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .04em;
+  padding: 10px 18px; border-radius: 8px; cursor: pointer;
+  color: #ffffff; border: 0; background: var(--grad-acento);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.hud-back:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(124,58,237,.4); }
+.hud-title {
+  margin: 0; font-family: var(--fuente-mono); font-size: .72rem;
+  text-transform: uppercase; letter-spacing: .1em; color: var(--texto-suave);
+}
+.hud-title span { color: var(--rosa); }
+.hud-spacer { width: 150px; flex: 0 0 auto; }
+
+/* ---------- Pantallas ---------- */
+.pantalla { display: none; padding: 40px 0 60px; }
+.pantalla.activa { display: block; }
+
+.kicker { font-family: var(--fuente-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--morado); margin-bottom: 10px; }
+[data-theme="dark"] .kicker { color: var(--morado-claro); }
+.page-title { font-size: clamp(1.8rem, 5vw, 2.8rem); color: var(--morado); margin-bottom: 12px; }
+[data-theme="dark"] .page-title { color: var(--morado-claro); }
+.intro { color: var(--texto-suave); max-width: 60ch; margin-bottom: 28px; }
+.intro b { color: var(--morado); }
+[data-theme="dark"] .intro b { color: var(--morado-claro); }
+
+/* ---------- Menú: rejilla de hamburguesas ---------- */
+.grid-burgers { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+.burger-card {
+  background: var(--panel); border: 1px solid var(--linea); border-radius: 12px;
+  box-shadow: var(--sombra); overflow: hidden; cursor: pointer; text-align: left;
+  font: inherit; color: inherit; padding: 0;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.burger-card:hover, .burger-card:focus-visible { transform: translateY(-4px); border-color: var(--morado-claro); box-shadow: var(--sombra-hover); }
+.burger-media { aspect-ratio: 4 / 3; overflow: hidden; background: var(--grad-suave); }
+.burger-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.burger-card:hover .burger-media img { transform: scale(1.06); }
+.burger-body { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.burger-body h3 { font-size: 1.05rem; color: var(--morado); }
+[data-theme="dark"] .burger-body h3 { color: var(--morado-claro); }
+.burger-ver { font-family: var(--fuente-mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; color: var(--texto-suave); white-space: nowrap; }
+
+/* ---------- Capas (ficha) ---------- */
+.capa {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center; padding: 20px;
+  background: rgba(27, 23, 48, 0.55); backdrop-filter: blur(4px);
+}
+[data-theme="dark"] .capa { background: rgba(0, 0, 0, 0.66); }
+.capa[hidden] { display: none; }
+
+.ficha-card {
+  width: min(920px, 94vw); max-height: 88vh; overflow: hidden auto;
+  display: grid; grid-template-columns: minmax(0, min(46vmin, 44vw)) minmax(0, 1fr); gap: 24px;
+  background: var(--panel); border: 1px solid var(--linea); border-radius: 14px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5); padding: 24px;
+}
+.ficha-media { aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden; background: var(--grad-suave); justify-self: center; align-self: start; width: 100%; }
+.ficha-media img { width: 100%; height: 100%; object-fit: cover; }
+.ficha-texto { align-self: start; }
+.ficha-texto h2 { font-size: 1.6rem; color: var(--morado); margin-bottom: 12px; }
+[data-theme="dark"] .ficha-texto h2 { color: var(--morado-claro); }
+.ficha-texto p { color: var(--texto-suave); }
+.ficha-acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+
+/* ---------- Aviso de éxito (toast superior, no bloquea) ---------- */
+/* Entrada y salida son TRANSICIONES puras (sin keyframe), para que la
+   salida no se la "coma" el fill-mode de una animación. La curva de
+   entrada va en .visible; la de salida va en #toast. */
+#toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  translate: -50% -160%;   /* oculto: subido y encogido */
+  scale: .82;
+  z-index: 180;
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 26px;
+  max-width: min(620px, 92vw);
+  background: linear-gradient(120deg, #8c00ff, #0077ff 46%, #ee00ff);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 14px;
+  color: #ffffff;
+  box-shadow:
+    0 22px 60px rgba(140, 0, 255, 0.55),
+    0 0 28px rgba(238, 0, 255, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  /* SALIDA: sube y encoge con ease-in */
+  transition:
+    translate .4s cubic-bezier(.55, .05, .7, .2),
+    scale     .4s cubic-bezier(.55, .05, .7, .2),
+    opacity   .3s ease;
+}
+#toast.visible {
+  translate: -50% 0;       /* visible: en su sitio y a tamaño real */
+  scale: 1;
+  opacity: 1;
+  /* ENTRADA: cae suave (translate) + rebote/pop (scale) */
+  transition:
+    translate .5s cubic-bezier(.2, .8, .2, 1),
+    scale     .5s cubic-bezier(.2, 1.5, .3, 1),
+    opacity   .35s ease;
+}
+.toast-emoji { font-size: 42px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35)); }
+.toast-texto { display: flex; flex-direction: column; gap: 3px; }
+.toast-titulo {
+  font-family: var(--fuente-titulo); font-size: 1.1rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em; color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.toast-msg {
+  font-family: var(--fuente-mono); font-size: .78rem; color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Juego: barra superior ---------- */
+.juego-top {
+  max-width: 980px; margin: 0 auto 24px; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+}
+.juego-top h2 { font-size: clamp(1.1rem, 3vw, 1.6rem); color: var(--morado); text-align: center; flex: 1; min-width: 200px; }
+[data-theme="dark"] .juego-top h2 { color: var(--morado-claro); }
+
+/*
+   Campo de juego: columna izquierda (plato) y derecha (pasos)
+   con la MISMA altura (align-items:stretch). El plato se empuja
+   abajo (justify-content:flex-end) → queda alineado con el borde
+   inferior de la lista de pasos.
+*/
+.juego-campo {
+  max-width: 980px; margin: 0 auto; padding: 0 20px;
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: stretch;
+}
+
+/* Plato */
+.plato-zona {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: flex-end; gap: 10px; min-height: 0;
+}
+.mensaje-error {
+  min-height: 1.4em; margin: 0; font-family: var(--fuente-mono); font-size: .72rem;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--rosa); opacity: 0;
+  transition: opacity .25s ease;
+}
+.mensaje-error.visible { opacity: 1; }
+
+/*
+   Caja del plato CUADRADA (aspect-ratio 1/1) para que la imagen
+   3000×3000 se recorte de forma predecible y las capas apilen
+   justo sobre el centro del plato, a cualquier tamaño de pantalla.
+*/
+.plato {
+  position: relative;
+  width: min(400px, 84vw);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+/* El plato ahora es la imagen PNG (3000×3000). Se centra abajo. */
+.plato-base {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: var(--plato-img);
+  aspect-ratio: 1 / 1;
+  background: url('Imagenes/Recetario/Plato.png') no-repeat center bottom / contain;
+}
+
+/*
+   Zona de apilado: desde la superficie del plato (--plato-apoyo)
+   hasta arriba. Las capas son ABSOLUTAS y el JS las coloca con
+   bottom = i*--paso, repartiendo el espacio según el nº de pasos.
+*/
+.plato-capas { position: absolute; left: 0; right: 0; top: 0; bottom: var(--plato-apoyo); }
+.capa-ing {
+  position: absolute; left: 50%; bottom: 0;
+  transform: translateX(-50%);
+  line-height: 1;
+  filter: drop-shadow(0 5px 6px rgba(0,0,0,.3));
+  animation: capa-pop .3s ease;
+}
+@keyframes capa-pop {
+  from { opacity: 0; transform: translateX(-50%) scale(.4); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+/* Pasos */
+.pasos-caja { background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; box-shadow: var(--sombra); padding: 18px 20px; }
+.pasos-caja h3 { font-size: .95rem; color: var(--morado); margin-bottom: 12px; }
+[data-theme="dark"] .pasos-caja h3 { color: var(--morado-claro); }
+.pasos li {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--fuente-mono); font-size: .78rem; color: var(--texto-suave);
+  padding: 8px 10px; border-radius: 8px; margin-bottom: 4px;
+  border: 1px solid transparent;
+}
+.pasos .p-num { color: var(--morado-claro); min-width: 22px; }
+.pasos li.is-current { background: var(--grad-suave); border-color: var(--morado-claro); color: var(--texto); }
+.pasos li.is-done { color: var(--azul); text-decoration: line-through; }
+.pasos li.is-done .p-num::after { content: " ✓"; text-decoration: none; }
+
+/* Inventario deslizable */
+.bandeja { max-width: 980px; margin: 26px auto 0; padding: 0 20px; }
+.bandeja-hint { font-family: var(--fuente-mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .08em; color: var(--texto-suave); margin-bottom: 10px; }
+.inventario {
+  display: flex; gap: 12px; overflow-x: auto; padding: 14px 6px 18px;
+  scroll-snap-type: x proximity;
+  background: var(--panel); border: 1px solid var(--linea); border-radius: 12px;
+  box-shadow: var(--sombra);
+}
+.ing {
+  flex: 0 0 auto; scroll-snap-align: center;
+  width: 92px; padding: 12px 6px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: var(--grad-suave); border: 2px solid var(--linea); border-radius: 10px;
+  cursor: grab; font: inherit; color: var(--texto-suave);
+  touch-action: none; user-select: none; -webkit-user-select: none;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .3s ease;
+}
+.ing:hover, .ing:focus-visible { transform: translateY(-3px); border-color: var(--morado-claro); box-shadow: var(--glow-morado); }
+.ing:active { cursor: grabbing; }
+.ing .ing-emoji { font-size: 40px; line-height: 1; }
+.ing .ing-nombre { font-family: var(--fuente-mono); font-size: .58rem; text-transform: uppercase; letter-spacing: .04em; text-align: center; }
+.ing.usado { opacity: .28; pointer-events: none; filter: grayscale(1); }
+.ing.shake { animation: shake .4s ease; border-color: var(--rosa); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* Fantasma que sigue al puntero al arrastrar */
+.ing-fantasma {
+  position: fixed; z-index: 150; pointer-events: none;
+  margin: -24px 0 0 -24px; font-size: 48px; line-height: 1;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,.4));
+  transition: transform .35s cubic-bezier(.3,1.3,.5,1), opacity .35s ease;
+}
+/* Resalta el plato cuando arrastras un ingrediente sobre él */
+.plato.destino { outline: 3px dashed var(--morado-claro); outline-offset: 8px; border-radius: 16px; }
+
+/* Confeti */
+#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 200; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 820px) {
+  .juego-campo { grid-template-columns: 1fr; }
+  .ficha-card { grid-template-columns: 1fr; }
+  .ficha-media { max-width: 320px; }
+  .hud-title { display: none; }
+  .hud-spacer { display: none; }
+}
+@media (max-width: 720px) {
+  .juego-top { justify-content: center; }
+  .juego-top h2 { order: -1; width: 100%; }
+  .ing { width: 80px; }
+  .ing .ing-emoji { font-size: 34px; }
+  #toast { top: 72px; padding: 13px 18px; gap: 12px; }
+  .toast-emoji { font-size: 34px; }
+  .toast-titulo { font-size: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ============================================================
+   Ingredientes con imagen (recetas con fotos reales)
+   ------------------------------------------------------------
+   El tile muestra la foto del ingrediente; el fantasma que sigue
+   al puntero también. Las rutas con espacios funcionan tal cual.
+   ============================================================ */
+.ing .ing-img {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+}
+.ing .ing-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* Fantasma con imagen: se centra sobre el puntero (compensa el
+   margen fijo de -24px del emoji con 12px extra por cada eje) */
+.ing-fantasma:has(img) {
+  margin: -36px 0 0 -36px;
+}
+.ing-fantasma img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
+}
+
+/* Sin marco al soltar sobre el plato: la caja .plato es cuadrada y el
+   outline no coincidía con el plato visual (delataba el centrado). */
+.plato.destino { outline: none; }
+
+.plato.destino { outline: none; }
+.plato.destino .plato-base {
+  filter: drop-shadow(0 0 20px rgba(140, 0, 255, 0.7));
+}
+
+/* ============================================================
+   Transición de fase (crossfade entre platos)
+   ------------------------------------------------------------
+   El plato se pinta con DOS capas (.plato-base y .plato-fase)
+   apiladas. Al cambiar de fase, la imagen nueva entra opaca por
+   debajo y se desvanece la de arriba → fundido limpio.
+   ============================================================ */
+.plato-base { transition: opacity .35s ease; z-index: 2; }
+.plato-fase {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: var(--plato-img);
+  aspect-ratio: 1 / 1;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity .35s ease;
+}

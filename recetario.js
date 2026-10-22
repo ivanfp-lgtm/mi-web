@@ -618,3 +618,146 @@
   sincronizar();
   pedirCentrar();
 })();
+
+/* ============================================================
+   Parche móvil: deslizar inventario + arrastrar ingrediente
+   ------------------------------------------------------------
+   En móvil:
+   - Si el gesto es horizontal, desliza la bandeja.
+   - Si el gesto es vertical, arranca el arrastre original.
+   Así no tienes que pelear con el scroll para montar la hamburguesa.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var juego = document.getElementById('pantalla-juego');
+  var inventario = document.getElementById('inventario');
+
+  if (!juego || !inventario) return;
+  if (typeof PointerEvent !== 'function') return;
+
+  var gest = null;
+
+  function esMovil() {
+    return window.matchMedia('(max-width: 860px)').matches;
+  }
+
+  function esTactil(e) {
+    return e.pointerType === 'touch' || e.pointerType === 'pen';
+  }
+
+  function enJuego() {
+    return juego.classList.contains('activa');
+  }
+
+  function sincronizarBody() {
+    document.body.classList.toggle('juego-activo', enJuego());
+  }
+
+  new MutationObserver(sincronizarBody).observe(juego, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  sincronizarBody();
+
+  function closest(target, selector) {
+    return target && target.closest ? target.closest(selector) : null;
+  }
+
+  function botonIngrediente(e) {
+    return closest(e.target, '.ing');
+  }
+
+  function enviar(type, e, buttons) {
+    if (!gest || !gest.button) return;
+
+    try {
+      gest.button.dispatchEvent(new PointerEvent(type, {
+        pointerId: gest.id,
+        pointerType: e.pointerType || 'touch',
+        isPrimary: true,
+        clientX: e.clientX,
+        clientY: e.clientY,
+        button: 0,
+        buttons: buttons,
+        bubbles: true,
+        cancelable: true
+      }));
+    } catch (err) {
+      // Si el navegador no admite el evento sintético, no pasa nada.
+    }
+  }
+
+  function onDown(e) {
+    if (!esMovil() || !esTactil(e) || !e.isTrusted || !enJuego()) return;
+
+    var boton = botonIngrediente(e);
+    if (!boton) return;
+
+    gest = {
+      id: e.pointerId,
+      button: boton,
+      x: e.clientX,
+      y: e.clientY,
+      scroll: inventario.scrollLeft,
+      mode: 'pending' // pending -> drag | scroll
+    };
+
+    // Evitamos que el arrastre original arranque automáticamente.
+    e.stopPropagation();
+  }
+
+  function onMove(e) {
+    if (!gest || e.pointerId !== gest.id || !esTactil(e) || !e.isTrusted) return;
+
+    // Bloqueamos el evento original mientras el parche decida qué hacer.
+    e.stopPropagation();
+
+    var dx = e.clientX - gest.x;
+    var dy = e.clientY - gest.y;
+
+    if (gest.mode === 'pending') {
+      // Gesto vertical => arrastrar ingrediente.
+      if (
+        dy < -18 ||
+        (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx) * 0.85)
+      ) {
+        gest.mode = 'drag';
+        enviar('pointerdown', e, 1);
+      }
+      // Gesto horizontal => deslizar inventario.
+      else if (
+        Math.abs(dx) > 12 &&
+        Math.abs(dx) > Math.abs(dy) * 1.15
+      ) {
+        gest.mode = 'scroll';
+      }
+    }
+
+    if (gest.mode === 'scroll') {
+      inventario.scrollLeft = gest.scroll - dx;
+    }
+
+    if (gest.mode === 'drag') {
+      enviar('pointermove', e, 1);
+    }
+  }
+
+  function onEnd(e) {
+    if (!gest || e.pointerId !== gest.id || !esTactil(e) || !e.isTrusted) return;
+
+    e.stopPropagation();
+
+    if (gest.mode === 'drag') {
+      enviar(e.type === 'pointercancel' ? 'pointercancel' : 'pointerup', e, 0);
+    }
+
+    gest = null;
+  }
+
+  document.addEventListener('pointerdown', onDown, true);
+  document.addEventListener('pointermove', onMove, true);
+  document.addEventListener('pointerup', onEnd, true);
+  document.addEventListener('pointercancel', onEnd, true);
+})();

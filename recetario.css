@@ -623,6 +623,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     font-size: .48rem;
     line-height: 1.05;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -643,5 +644,35 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 860px) and (pointer: coarse) {
   #pantalla-juego.activa .ing-fantasma {
     margin: -64px 0 0 -34px;
+  }
+}
+
+/* ============================================================
+   Parche móvil: centrado fino del plato + inventario deslizable
+   ============================================================ */
+@media (max-width: 860px) {
+  /* Plato: centrado exacto en móvil */
+  #pantalla-juego.activa .plato-zona {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  #pantalla-juego.activa .plato {
+    margin-inline: auto;
+    /* Si sigue descolocado, cambia -2px por -1px, -3px o 0px */
+    transform: translateX(-2px);
+  }
+
+  /* Inventario: en móvil se desliza con el dedo */
+  #pantalla-juego.activa .inventario {
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: none;
+  }
+
+  /* El tile no debe capturar el scroll nativo; el JS lo gestiona */
+  #pantalla-juego.activa .ing {
+    touch-action: none;
   }
 }

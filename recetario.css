@@ -424,3 +424,224 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   z-index: 1;
   transition: opacity .35s ease;
 }
+
+/* ============================================================
+   Adaptación móvil del minijuego
+   ============================================================ */
+@media (max-width: 860px) {
+  /* Bloqueamos el scroll de la página mientras se juega */
+  body.juego-activo {
+    overflow: hidden;
+  }
+
+  body.juego-activo .rec-hud {
+    display: none;
+  }
+
+  body.juego-activo #toast {
+    top: 68px;
+    top: calc(68px + env(safe-area-inset-top));
+  }
+
+  /* Fallback por si el navegador soporta :has() */
+  body:has(#pantalla-juego.activa) {
+    overflow: hidden;
+  }
+
+  body:has(#pantalla-juego.activa) .rec-hud {
+    display: none;
+  }
+
+  body:has(#pantalla-juego.activa) #toast {
+    top: 68px;
+    top: calc(68px + env(safe-area-inset-top));
+  }
+
+  /* Pantalla de juego completa en móvil */
+  #pantalla-juego.activa {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    background: var(--fondo);
+    overflow: hidden;
+
+    padding-left: 12px;
+    padding-right: 12px;
+
+    padding-top: 10px;
+    padding-top: calc(10px + env(safe-area-inset-top));
+
+    padding-bottom: 10px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+
+  /* Barra superior del juego */
+  #pantalla-juego.activa .juego-top {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  #pantalla-juego.activa .juego-top h2 {
+    order: 0;
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: .95rem;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #pantalla-juego.activa .juego-top .btn {
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    font-size: .65rem;
+    white-space: nowrap;
+  }
+
+  /* Campo de juego: plato arriba, pasos abajo compactos */
+  #pantalla-juego.activa .juego-campo {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 8px;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Plato */
+  #pantalla-juego.activa .plato-zona {
+    min-height: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  #pantalla-juego.activa .plato {
+    /* Si en tu móvil se ve muy grande o muy pequeño, cambia 42svh */
+    width: min(78vw, 42vh);
+    width: min(78vw, 42svh);
+  }
+
+  #pantalla-juego.activa .mensaje-error {
+    margin: 0 0 4px;
+    font-size: .62rem;
+  }
+
+  /* Pasos: tira horizontal compacta */
+  #pantalla-juego.activa .pasos-caja {
+    max-height: 72px;
+    min-height: 0;
+    padding: 8px 10px;
+    overflow: hidden;
+  }
+
+  #pantalla-juego.activa .pasos-caja h3 {
+    display: none;
+  }
+
+  #pantalla-juego.activa .pasos {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    padding-bottom: 4px;
+  }
+
+  #pantalla-juego.activa .pasos li {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    margin: 0;
+    padding: 6px 8px;
+    font-size: .62rem;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  #pantalla-juego.activa .pasos .p-num {
+    min-width: 16px;
+    font-size: .58rem;
+  }
+
+  /* Bandeja / inventario abajo siempre visible */
+  #pantalla-juego.activa .bandeja {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    flex: 0 0 auto;
+  }
+
+  #pantalla-juego.activa .bandeja-hint {
+    margin-bottom: 6px;
+    font-size: .58rem;
+  }
+
+  #pantalla-juego.activa .inventario {
+    gap: 8px;
+    padding: 8px 6px;
+    max-height: 116px;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+  }
+
+  #pantalla-juego.activa .ing {
+    width: 68px;
+    min-width: 68px;
+    padding: 8px 4px 6px;
+    gap: 4px;
+  }
+
+  #pantalla-juego.activa .ing .ing-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  #pantalla-juego.activa .ing .ing-emoji {
+    font-size: 32px;
+  }
+
+  #pantalla-juego.activa .ing .ing-nombre {
+    font-size: .48rem;
+    line-height: 1.05;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Fantasma del arrastre */
+  #pantalla-juego.activa .ing-fantasma {
+    margin: -34px 0 0 -34px;
+  }
+
+  #pantalla-juego.activa .ing-fantasma img {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* En pantallas táctiles, subimos el fantasma para que el dedo no tape el plato */
+@media (max-width: 860px) and (pointer: coarse) {
+  #pantalla-juego.activa .ing-fantasma {
+    margin: -64px 0 0 -34px;
+  }
+}

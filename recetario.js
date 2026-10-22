@@ -547,3 +547,74 @@
 
   renderMenu();
 })();
+
+/* ============================================================
+   Adaptación móvil: bloquea scroll y centra el paso actual
+   PEGAR AL FINAL DE recetario.js
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var juego = document.getElementById('pantalla-juego');
+  var pasos = document.getElementById('lista-pasos');
+
+  if (!juego || !pasos) return;
+
+  function estaJuego() {
+    return juego.classList.contains('activa');
+  }
+
+  function sincronizar() {
+    document.body.classList.toggle('juego-activo', estaJuego());
+  }
+
+  var pendiente = false;
+
+  function pedirCentrar() {
+    if (pendiente) return;
+    pendiente = true;
+
+    requestAnimationFrame(function () {
+      pendiente = false;
+      centrar();
+    });
+  }
+
+  function centrar() {
+    if (!estaJuego()) return;
+
+    var actual = pasos.querySelector('.is-current') || pasos.firstElementChild;
+    if (!actual) return;
+
+    var rA = actual.getBoundingClientRect();
+    var rC = pasos.getBoundingClientRect();
+
+    if (!rC.width) return;
+
+    // Centra el paso actual sin provocar scroll vertical de la página
+    pasos.scrollLeft += (rA.left + rA.width / 2) - (rC.left + rC.width / 2);
+  }
+
+  // Cuando cambia el estado de la pantalla de juego
+  new MutationObserver(function () {
+    sincronizar();
+
+    if (estaJuego()) {
+      pedirCentrar();
+    }
+  }).observe(juego, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  // Cuando cambian los pasos o sus clases
+  new MutationObserver(pedirCentrar).observe(pasos, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  sincronizar();
+  pedirCentrar();
+})();

@@ -23,8 +23,8 @@
     {
       nombre: 'Mermelada de bacon',
       // La portada es la fase final (la hamburguesa terminada)
-      img: CARPETA + 'Mermelada de bacon/Fases/7.png',
-      desc: 'Mi favorita para comidas especiales: pan de brioche, mayonesa con especias, cebolla, bacon glaseado con mermelada, carne de cerdo y cheddar fundido. El contraste dulce-salado es lo que la hace adictiva.',
+      img: CARPETA + 'Mermelada de bacon/Foto Panel.png',
+      desc: 'Pan de brioche, mayonesa con especias, cebolla caramelizada junto bacon glaseado con mermelada, carne de cerdo y cheddar fundido. El contraste dulce-salado es lo que la hace adictiva.',
       pasos: [
         { nombre: 'Pan de abajo',          img: CARPETA + 'Mermelada de bacon/Pan de abajo.png',          fase: CARPETA + 'Mermelada de bacon/Fases/1.png' },
         { nombre: 'Mayonesa con especias', img: CARPETA + 'Mermelada de bacon/Mayonesa con especias.png', fase: CARPETA + 'Mermelada de bacon/Fases/2.png' },
@@ -37,8 +37,8 @@
     },
     {
       nombre: 'Serrana',
-      img: CARPETA + 'Serrana/Fases/7.png',
-      desc: 'Un homenaje a lo clásico español: jamón serrano sobre carne de cerdo, con cebolla, cheddar fundido y una mayonesa de yema que lo une todo. Simple, contundente y muy nuestra.',
+      img: CARPETA + 'Serrana/Foto Panel.png',
+      desc: 'Pan de brioche, mayonesa con yemas, cebolla dorada, jamón serrano, carne de cerdo y cheddar fundido. Simple, contundente y muy española.',
       pasos: [
         { nombre: 'Pan de abajo',      img: CARPETA + 'Serrana/Pan de abajo.png',            fase: CARPETA + 'Serrana/Fases/1.png' },
         { nombre: 'Mayonesa con yema', img: CARPETA + 'Serrana/Mayonasa con llema.png',      fase: CARPETA + 'Serrana/Fases/2.png' },
@@ -51,8 +51,8 @@
     },
     {
       nombre: 'Carbonara',
-      img: CARPETA + 'Carbonara/Fases/6.png',
-      desc: 'La más cremosa de todas: la salsa carbonara hace de hilo conductor y va en dos capas, una abajo y otra arriba de la carne, para que cada bocado quede bien empapado. Con bacon y cerdo, es un festín.',
+      img: CARPETA + 'Carbonara/Foto Panel.png',
+      desc: 'Pan de  brioche, salsa carbonara, bacon y carne de cerdo. La más sencilla y la más cremosa.',
       pasos: [
         { nombre: 'Pan de abajo',    img: CARPETA + 'Carbonara/Pan de abajo.png',      fase: CARPETA + 'Carbonara/Fases/1.png' },
         { nombre: 'Carbonara',       img: CARPETA + 'Carbonara/Carbonara.png',         fase: CARPETA + 'Carbonara/Fases/2.png' },
@@ -64,8 +64,8 @@
     },
     {
       nombre: 'Almussafes',
-      img: CARPETA + 'Almussafes/Fases/8.png',
-      desc: 'La receta con más carácter: sobrasada untable, miel para equilibrar, rúcula fresca y queso de cabra sobre carne de ternera. Dulce, salado y un punto amargo que la hace redonda. Un homenaje a mi pueblo.',
+      img: CARPETA + 'Almussafes/Foto Panel.png',
+      desc: 'Pan de  brioche, sobrasada fundida, cebolla caramelizada, carne de ternera, miel, rúcula y queso de cabra. Receta de pueblo versionada a una hamburguesa.',
       pasos: [
         { nombre: 'Pan de abajo',     img: CARPETA + 'Almussafes/Pan de abajo.png',      fase: CARPETA + 'Almussafes/Fases/1.png' },
         { nombre: 'Sobrasada',        img: CARPETA + 'Almussafes/Sobrasada.png',         fase: CARPETA + 'Almussafes/Fases/2.png' },
@@ -79,8 +79,8 @@
     },
     {
       nombre: 'Pollo',
-      img: CARPETA + 'Pollo/Fases/6.png',
-      desc: 'El clásico pollo con patatas, pero en hamburguesa: carne de pollo, cebolla y patatas paja crujientes ligadas con una salsa cremosa. La más informal y la que más me sale cuando tengo prisa.',
+      img: CARPETA + 'Pollo/Foto Panel.png',
+      desc: 'Pan de  brioche, una salsa casera (Preparada con soja, miel, aceite y salsa BBQ), cebolla dorada, patatas paja y carne de pollo. Una receta inspirada en los muslos de pollo de mi padre.',
       pasos: [
         { nombre: 'Pan de abajo',    img: CARPETA + 'Pollo/Pan de abajo.png',      fase: CARPETA + 'Pollo/Fases/1.png' },
         { nombre: 'Salsa',           img: CARPETA + 'Pollo/Salsa.png',             fase: CARPETA + 'Pollo/Fases/2.png' },

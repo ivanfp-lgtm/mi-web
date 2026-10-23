@@ -18,24 +18,24 @@
   const OBRAS = [
     {
       pared: 'front',
-      src: 'https://picsum.photos/seed/oc-personaje-uno/900/900',
-      titulo: 'OC · Personaje 1',
-      resumen: 'Ficha corta (placa)',
-      descripcion: 'Descripción larga del primer OC. Aquí cuentas su historia, diseño, técnica usada, etc. Cambia este texto por el tuyo.'
+      src: 'Imagenes/Museo/StarNyan.png',
+      titulo: 'StarNyan',
+      resumen: 'Cambiaformas del espacio',
+      descripcion: 'StarNyan es el primer OC que cree, y al que más cariño tengo. Es un zorro antropomórfico que nació del espacio, con la capacidad de cambiar de forma, ya que su cuerpo está hecho de luz. Su diseño está lleno de detalles relacionados con las estrellas o el espacio, haciendo honor a su origen.'
     },
     {
       pared: 'right',
-      src: 'https://picsum.photos/seed/oc-personaje-dos/700/1000',
-      titulo: 'OC · Personaje 2',
-      resumen: 'Ficha corta (placa)',
-      descripcion: 'Descripción larga del segundo OC. Al ser vertical, en el lienzo cuadrado se recorta solo el centro.'
+      src: 'Imagenes/Museo/Shiro.png',
+      titulo: 'Shiro',
+      resumen: 'El zorro onigiri',
+      descripcion: 'Shiro es mi segundo OC, y está fuertemente inspirado en los onigiris. Se trata de un zorro  antropomórfico cuya silueta recuerda a la típica comida japonesa, siendo su alimento favorito. Su diseño añade detalles naranjas, haciendo referencia al caviar rojo, un buen acompañante de las bolas de arroz.'
     },
     {
       pared: 'left',
-      src: 'https://picsum.photos/seed/oc-personaje-tres/1200/800',
-      titulo: 'OC · Personaje 3',
-      resumen: 'Ficha corta (placa)',
-      descripcion: 'Descripción larga del tercer OC. Al ser apaisado, también se recorta al centro del lienzo cuadrado.'
+      src: 'Imagenes/Museo/Sparky.png',
+      titulo: 'Sparky',
+      resumen: 'Protogen de NEON',
+      descripcion: 'Sparky es mi tercer OC, con el diseño más futurista y asimétrico de todos. Es un animal antropomórfico con partes robóticas, conocidos como protogens. Es amante de la programación y de los videojuegos, y su diseño está pensado para destacar los colores, hecho para dar un efecto de luces NEON.'
     }
   ];
 
